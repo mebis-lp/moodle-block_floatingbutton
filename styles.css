@@ -1,0 +1,133 @@
+.mbs-floatingicons {
+    position: fixed;
+    z-index: 1000;
+}
+
+.mbs-floatingicons-bottom {
+    bottom: 20px;
+}
+
+.mbs-floatingicons-right {
+    right: 20px;
+}
+
+.mbs-floatingicons-top {
+    top: 120px;
+}
+
+.mbs-floatingicons-left {
+    left: 80px;
+}
+
+.mbs-floatingicons-icon a{
+    border-radius: 100%;
+    background: #00a8d5;
+    opacity: 0.8;
+    padding: 4px;
+    margin: 4px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    float: none;
+    transition: transform 0.1s;
+    box-shadow: 0 0 10px 1px black;
+    font-size: 25px;
+    display: grid;
+    place-content: center; 
+}
+
+.mbs-floatingicons-icon a i{
+    font-size: 25px;
+    width: 100%;
+    height: 100%;
+}
+
+.mbs-floatingicons-icon a:hover {
+    transform: scale(1.1);
+}
+
+.mbs-floatingicons a:link {
+    text-decoration: none;
+}
+
+.mbs-floatingicons a {
+    color: aliceblue;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mbs-floatingicons button {
+    background: none;
+    border: none;
+    color: aliceblue;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mbs-floatingicons-edit-active {
+    color: black;
+}
+
+.mbs-floatingicons a:hover {
+    color: aliceblue;
+}
+
+.mbs-floatingicons-edit input[type=submit] {
+    background: darkred;
+}
+
+.mbs-floatingicons-iconpicker {
+    height: calc(1.5em + 0.75rem + 2px);
+    width: calc(1.5em + 0.75rem + 2px);
+}
+
+.mbs-iconpicker {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+.mbs-iconpicker-icon {
+    display: flex;
+    font-size: 25px;
+    height: 40px;
+    width: 40px;
+    padding: 4px;
+    margin: 4px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+    border: solid;
+    border-radius: 4px;
+}
+
+.mbs-iconpicker-icon.highlight {
+    background: goldenrod;
+}
+
+.mbs-iconpicker-search {
+    width: 100%;
+}
+
+.mbs-iconpicker-search-input {
+    width: 95%;
+}
+
+.mbs-floatingbutton-color-input input[type="color"] {
+    width: 2.5em;
+    padding: 0;
+}
