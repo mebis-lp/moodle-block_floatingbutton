@@ -299,8 +299,19 @@ class block_floatingbutton_edit_form extends block_edit_form {
         );
         $PAGE->requires->js_call_amd('block_floatingbutton/colorpicker', 'init', []);
 
+        // Calling this method here keeps the order with icons being shown first in form.
+        parent::definition();
+
+        if(!isset($data['config_defaulttextcolor'])) {
+            $data['config_defaulttextcolor'] = get_config('block_floatingbutton', 'defaulttextcolor');
+        }
+
+        if(!isset($data['config_defaultbackgroundcolor'])) {
+            $data['config_defaultbackgroundcolor'] = get_config('block_floatingbutton', 'defaultbackgroundcolor');
+        }
+
         // Renumber header entries to avoid gaps in numbering when an icon is deleted
-        if(!isset($mform->_submitValues['icondelete'])) {
+        if(isset($mform->_submitValues['icondelete'])) {
             $number = 1;
             for($i = 0; $i < $data['config_icon_number']; $i++) {
                 if(!key_exists($i, $mform->_submitValues['icondelete'])) {
@@ -316,7 +327,37 @@ class block_floatingbutton_edit_form extends block_edit_form {
             }
         }
 
-        // Calling this method here keeps the order with icons being shown first in form.
-        parent::definition();
+        // Set default for custom colors - this is necessary because setting the default value doesn't work 
+        // when using it in definition_after_data()
+        for($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
+            if(!isset($data['config_customlayout'][$i]) || $data['config_customlayout'][$i] != 1) {
+                if(!isset($data['config_textcolor'][$i]) || $data['config_textcolor'][$i] == '') {
+                    $this->setValue($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor']);
+                }
+                if(!isset($data['config_backgroundcolor'][$i]) || $data['config_backgroundcolor'][$i] == '') {
+                    $this->setValue($mform, 'text', 'config_backgroundcolor[' . $i . ']', $data['config_defaultbackgroundcolor']);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets a value directly in the moodleform object (to be called from definition_after_data)
+     * @param $mform The moodleform to change
+     * @param $type The type of the form element
+     * @param $name The name of the form element
+     * @param $value The new value of the form element
+     * @return void
+     */
+    public function setValue($mform, $type, $name, $value): void {
+        for($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
+                for($j = 0; $j < count($mform->_elements); $j++) {
+                    if(
+                        $mform->_elements[$j]->_type == $type && 
+                        $mform->_elements[$j]->_attributes['name'] == $name) {
+                        $mform->_elements[$j]->_attributes['value'] = $value;
+                    }
+                }
+        }
     }
 }
