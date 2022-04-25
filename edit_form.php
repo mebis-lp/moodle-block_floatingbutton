@@ -267,11 +267,14 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $repeatedoptions['config_textcolor']['hideif'] = ['config_customlayout', 'neq', 1];
         $repeatedoptions['config_backgroundcolor']['hideif'] = ['config_customlayout', 'neq', 1];
         // Load default colors from admin setting.
-        $repeatedoptions['config_textcolor']['default'] = get_config('block_floatingbutton', 'defaulttextcolor');
-        $repeatedoptions['config_backgroundcolor']['default'] = get_config('block_floatingbutton', 'defaultbackgroundcolor');
+        // $repeatedoptions['config_textcolor']['default'] = get_config('block_floatingbutton', 'defaulttextcolor');
+        // $repeatedoptions['config_backgroundcolor']['default'] = get_config('block_floatingbutton', 'defaultbackgroundcolor');
 
         $repeats = 1;
 
+        // The value config_icon_number cannot be used for the number of repeats as it does _not_ refer to the
+        // number of entries. Instead it refers to the maximum of array keys (+1) while some keys are not used in 
+        // the array (e.g. when an entry is deleted). 
         if (isset($data['config_name'])) {
             $repeats = max(count($data['config_name']), $repeats);
         }
@@ -295,6 +298,23 @@ class block_floatingbutton_edit_form extends block_edit_form {
             ['.mbs-iconpicker-container', '.mbs-floatingicons-iconpicker']
         );
         $PAGE->requires->js_call_amd('block_floatingbutton/colorpicker', 'init', []);
+
+        // Renumber header entries to avoid gaps in numbering when an icon is deleted
+        if(!isset($mform->_submitValues['icondelete'])) {
+            $number = 1;
+            for($i = 0; $i < $data['config_icon_number']; $i++) {
+                if(!key_exists($i, $mform->_submitValues['icondelete'])) {
+                    for($j = 0; $j < count($mform->_elements); $j++) {
+                        if(
+                            $mform->_elements[$j]->_type == 'header' && 
+                            $mform->_elements[$j]->_attributes['name'] == 'config_header[' . $i . ']') {
+                            $mform->_elements[$j]->_text = get_string('icon', 'block_floatingbutton') . ' ' . $number;
+                            $number++;
+                        }
+                    }
+                }
+            }
+        }
 
         // Calling this method here keeps the order with icons being shown first in form.
         parent::definition();
