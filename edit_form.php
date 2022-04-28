@@ -116,25 +116,22 @@ class block_floatingbutton_edit_form extends block_edit_form {
 
         foreach ($cm->sections as $sectionnum => $section) {
             $sectioninfo = $cm->get_section_info($sectionnum);
-            $url = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&section=' . $sectionnum;
+            $cmid = 'section=' . $sectionnum;
             $name = $sectioninfo->name;
             if (empty($name)) {
-                $name = get_string('section') . ' ' . $sectionnum;
+                if ($sectionnum == 0) {
+                    $name = get_string('general');
+                } else {
+                    $name = get_string('section') . ' ' . $sectionnum;
+                }
             }
-            $courselist[$url] = '--- ' . $name . ' ---';
+            $courselist[$cmid] = '--- ' . $name . ' ---';
 
             foreach ($section as $cmid) {
                 $module = $cm->get_cm($cmid);
                 // Get only course modules which are not deleted.
                 if ($module->deletioninprogress == 0) {
-                    if (!is_null($module->url)) {
-                        // Link modules that have a view page to their corresponding url.
-                        $url = '' . $module->url;
-                    } else {
-                        // Other modules (like labels) are shown on the course page. Link to the corresponding anchor.
-                        $url = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&section=' . $sectionnum . '#module-' . $cmid;
-                    }
-                    $courselist[$url] = $module->name;
+                    $courselist['cmid=' . $cmid] = $module->name;
                 }
             }
         }
@@ -199,7 +196,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
         );
         $repeatarray[] = $mform->createElement(
             'select',
-            'config_internalurl',
+            'config_cmid',
             get_string('internalurl', 'block_floatingbutton'),
             $this->courselist
         );
@@ -249,7 +246,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $repeatedoptions = [];
         $repeatedoptions['config_name']['type'] = PARAM_RAW;
         $repeatedoptions['config_externalurl']['type'] = PARAM_URL;
-        $repeatedoptions['config_internalurl']['type'] = PARAM_URL;
+        $repeatedoptions['config_cmid']['type'] = PARAM_RAW;
         $repeatedoptions['config_icon']['type'] = PARAM_ALPHANUMEXT;
         $repeatedoptions['config_customlayout']['type'] = PARAM_INT;
         $repeatedoptions['config_textcolor']['type'] = PARAM_TEXT;
@@ -258,13 +255,13 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $repeatedoptions['config_type']['helpbutton'] = ['type', 'block_floatingbutton', '', true];
         $repeatedoptions['config_name']['helpbutton'] = ['name', 'block_floatingbutton', '', true];
         $repeatedoptions['config_externalurl']['helpbutton'] = ['externalurl', 'block_floatingbutton', '', true];
-        $repeatedoptions['config_internalurl']['helpbutton'] = ['internalurl', 'block_floatingbutton', '', true];
+        $repeatedoptions['config_cmid']['helpbutton'] = ['internalurl', 'block_floatingbutton', '', true];
         $repeatedoptions['config_icon']['helpbutton'] = ['icon', 'block_floatingbutton', '', true];
         $repeatedoptions['config_customlayout']['helpbutton'] = ['customlayout', 'block_floatingbutton', '', true];
         $repeatedoptions['config_textcolor']['helpbutton'] = ['textcolor', 'block_floatingbutton', '', true];
         $repeatedoptions['config_backgroundcolor']['helpbutton'] = ['backgroundcolor', 'block_floatingbutton', '', true];
         // Hide URL types not currently selected.
-        $repeatedoptions['config_internalurl']['hideif'] = ['config_type', 'neq', 'internal'];
+        $repeatedoptions['config_cmid']['hideif'] = ['config_type', 'neq', 'internal'];
         $repeatedoptions['config_externalurl']['hideif'] = ['config_type', 'neq', 'external'];
         $repeatedoptions['config_speciallink']['hideif'] = ['config_type', 'neq', 'special'];
         // Only show individual colors if custom layout is activated.

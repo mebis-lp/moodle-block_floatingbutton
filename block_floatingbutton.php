@@ -84,6 +84,7 @@ class block_floatingbutton extends block_base {
      * @return string
      */
     public function get_content() {
+        global $CFG;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -128,9 +129,39 @@ class block_floatingbutton extends block_base {
                 }
                 $url = null;
                 $edit = false;
+                $notavailable = false;
+                $name = null;
                 switch($this->config->type[$i]) {
                     case 'internal':
-                        $url = $this->config->internalurl[$i];
+                        list($type, $id) = explode('=', $this->config->cmid[$i]);
+                        switch($type) {
+                            case 'cmid':
+                                $module = $modinfo->get_cm($id);
+                                $name = $module->name;
+                                $notavailable = !$module->available;
+                                if (!is_null($module->url)) {
+                                    // Link modules that have a view page to their corresponding url.
+                                    $url = '' . $module->url;
+                                } else {
+                                    // Other modules (like labels) are shown on the course page. Link to the corresponding anchor.
+                                    $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid .
+                                        '&section=' . $module->sectionnum . '#module-' . $id;
+                                }
+                            break;
+                            case 'section':
+                                $sectioninfo = $modinfo->get_section_info($id);
+                                $name = $sectioninfo->name;
+                                if (empty($name)) {
+                                    if ($id == 0) {
+                                        $name = get_string('general');
+                                    } else {
+                                        $name = get_string('section') . ' ' . $id;
+                                    }
+                                }
+                                $notavailable = !$sectioninfo->available;
+                                $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid . '&section=' . $id;
+                            break;
+                        }
                         break;
                     case 'external':
                         $url = $this->config->externalurl[$i];
@@ -190,12 +221,13 @@ class block_floatingbutton extends block_base {
                     $this->config->defaulttextcolor
                 );
                 $icon = [
-                    'name' => $this->config->name[$i],
+                    'name' => (empty($this->config->name[$i]) ? $name : $this->config->name[$i]),
                     'url' => $url,
                     'icon' => $this->config->icon[$i],
                     'edit' => $edit,
                     'backgroundcolor' => $backgroundcolor,
-                    'textcolor' => $textcolor
+                    'textcolor' => $textcolor,
+                    'notavailable' => $notavailable
                 ];
                 $context->icons[] = $icon;
                 $context->positionhorizontal = $this->config->positionhorizontal;
