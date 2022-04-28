@@ -116,7 +116,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
 
         foreach ($cm->sections as $sectionnum => $section) {
             $sectioninfo = $cm->get_section_info($sectionnum);
-            $url = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&section='. $sectionnum;
+            $url = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&section=' . $sectionnum;
             $name = $sectioninfo->name;
             if (empty($name)) {
                 $name = get_string('section') . ' ' . $sectionnum;
@@ -125,12 +125,16 @@ class block_floatingbutton_edit_form extends block_edit_form {
 
             foreach ($section as $cmid) {
                 $module = $cm->get_cm($cmid);
-                // Get only course modules which are not deleted and have a view page.
+                // Get only course modules which are not deleted.
                 if ($module->deletioninprogress == 0) {
                     if (!is_null($module->url)) {
+                        // Link modules that have a view page to their corresponding url.
                         $url = '' . $module->url;
-                        $courselist[$url] = $module->name;
+                    } else {
+                        // Other modules (like labels) are shown on the course page. Link to the corresponding anchor.
+                        $url = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&section=' . $sectionnum . '#module-' . $cmid;
                     }
+                    $courselist[$url] = $module->name;
                 }
             }
         }
