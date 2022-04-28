@@ -81,7 +81,7 @@ class block_floatingbutton extends block_base {
     /**
      * Returns the block content. Content is cached for performance reasons.
      *
-     * @return string
+     * @return stdClass
      */
     public function get_content() {
         global $CFG;
