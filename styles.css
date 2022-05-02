@@ -22,7 +22,6 @@
 .mbs-floatingicons-icon a{
     border-radius: 100%;
     background: #00a8d5;
-    opacity: 0.8;
     padding: 4px;
     margin: 4px;
     width: 50px;
@@ -30,7 +29,6 @@
     line-height: 50px;
     float: none;
     transition: transform 0.1s;
-    box-shadow: 0 0 10px 1px black;
     font-size: 25px;
     display: grid;
     place-content: center; 

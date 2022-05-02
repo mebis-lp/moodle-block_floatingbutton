@@ -267,6 +267,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
         // Only show individual colors if custom layout is activated.
         $repeatedoptions['config_textcolor']['hideif'] = ['config_customlayout', 'neq', 1];
         $repeatedoptions['config_backgroundcolor']['hideif'] = ['config_customlayout', 'neq', 1];
+        // Choosing an icon is mandatory.
+        $repeatedoptions['config_icon']['rule'] = [get_string('icon_missing', 'block_floatingbutton'), 'required', 'client'];
 
         $repeats = 1;
 

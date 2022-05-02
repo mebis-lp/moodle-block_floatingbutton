@@ -45,6 +45,7 @@ $string['floatingbutton:myaddinstance'] = 'Einen Floating Buttons Block zum Dash
 $string['horizontal_space'] = 'Horizontaler Abstand';
 $string['icon'] = 'Icon';
 $string['icon_help'] = 'FontAwesome-Code für das Icon';
+$string['icon_missing'] = 'Ein Icon muss ausgewählt werden';
 $string['left'] = 'Links';
 $string['internalurl'] = 'Abschnitt oder Aktivität';
 $string['internalurl_help'] = 'Abschnitt oder Aktivität auf die das Icon verweisen soll';
