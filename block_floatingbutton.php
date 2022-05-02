@@ -135,35 +135,43 @@ class block_floatingbutton extends block_base {
                     case 'internal':
                         // Skip empty internal links (this could happen, when a course module that is referenced by an icon
                         // is not included in backup).
-                        if (!is_null($this->config->cmid)) {
+                        if (!is_null($this->config->cmid[$i])) {
                             list($type, $id) = explode('=', $this->config->cmid[$i]);
                             switch($type) {
                                 case 'cmid':
-                                    $module = $modinfo->get_cm($id);
-                                    $name = $module->name;
-                                    $notavailable = !$module->available;
-                                    if (!is_null($module->url)) {
-                                        // Link modules that have a view page to their corresponding url.
-                                        $url = '' . $module->url;
+                                    if (in_array($id, array_keys($modinfo->get_cms()))) {
+                                        $module = $modinfo->get_cm($id);
+                                        $name = $module->name;
+                                        $notavailable = !$module->available;
+                                        if (!is_null($module->url)) {
+                                            // Link modules that have a view page to their corresponding url.
+                                            $url = '' . $module->url;
+                                        } else {
+                                            // Other modules (like labels) are shown on the course page. Link to the corresponding
+                                            // anchor.
+                                            $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid .
+                                                '&section=' . $module->sectionnum . '#module-' . $id;
+                                        }
                                     } else {
-                                        // Other modules (like labels) are shown on the course page. Link to the corresponding
-                                        // anchor.
-                                        $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid .
-                                            '&section=' . $module->sectionnum . '#module-' . $id;
+                                        $notavailable = true;
                                     }
                                 break;
                                 case 'section':
                                     $sectioninfo = $modinfo->get_section_info($id);
-                                    $name = $sectioninfo->name;
-                                    if (empty($name)) {
-                                        if ($id == 0) {
-                                            $name = get_string('general');
-                                        } else {
-                                            $name = get_string('section') . ' ' . $id;
+                                    if (!is_null($sectioninfo)) {
+                                        $name = $sectioninfo->name;
+                                        if (empty($name)) {
+                                            if ($id == 0) {
+                                                $name = get_string('general');
+                                            } else {
+                                                $name = get_string('section') . ' ' . $id;
+                                            }
                                         }
+                                        $notavailable = !$sectioninfo->available;
+                                        $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid . '&section=' . $id;
+                                    } else {
+                                        $notavailable = true;
                                     }
-                                    $notavailable = !$sectioninfo->available;
-                                    $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid . '&section=' . $id;
                                 break;
                             }
                         }
