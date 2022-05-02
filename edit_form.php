@@ -22,7 +22,8 @@
  * @author     Stefan Hanauska <stefan.hanauska@csg-in.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_floatingbutton_edit_form extends block_edit_form {
+class block_floatingbutton_edit_form extends block_edit_form
+{
 
     /**
      * Form definition - call to parent definition() is avoided here to get
@@ -30,7 +31,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
      *
      * @return void
      */
-    public function definition() {
+    public function definition()
+    {
     }
 
     /**
@@ -39,7 +41,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
      * @param stdClass $mform
      * @return void
      */
-    protected function specific_definition($mform) {
+    protected function specific_definition($mform)
+    {
         $positionsvertical = [
             'bottom' => get_string('bottom', 'block_floatingbutton'),
             'top' => get_string('top', 'block_floatingbutton')
@@ -98,7 +101,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
      *
      * @return array
      */
-    public function get_course_modules() {
+    public function get_course_modules()
+    {
         if (isset($this->courselist)) {
             return;
         }
@@ -143,7 +147,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
      *
      * @return void
      */
-    public function definition_after_data() {
+    public function definition_after_data()
+    {
         global $PAGE;
 
         $types = [
@@ -158,7 +163,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
             $speciallinkoptions[$k] = get_string($k, 'block_floatingbutton');
         }
 
-        $mform = & $this->_form;
+        $mform = &$this->_form;
 
         $mform->addElement(
             'html',
@@ -267,8 +272,6 @@ class block_floatingbutton_edit_form extends block_edit_form {
         // Only show individual colors if custom layout is activated.
         $repeatedoptions['config_textcolor']['hideif'] = ['config_customlayout', 'neq', 1];
         $repeatedoptions['config_backgroundcolor']['hideif'] = ['config_customlayout', 'neq', 1];
-        // Choosing an icon is mandatory.
-        $repeatedoptions['config_icon']['rule'] = [get_string('icon_missing', 'block_floatingbutton'), 'required', 'client'];
 
         $repeats = 1;
 
@@ -310,20 +313,28 @@ class block_floatingbutton_edit_form extends block_edit_form {
             $data['config_defaultbackgroundcolor'] = get_config('block_floatingbutton', 'defaultbackgroundcolor');
         }
 
-        // Renumber header entries to avoid gaps in numbering when an icon is deleted.
+        $skip = [];
         if (isset($mform->_submitValues['icondelete'])) {
-            $number = 1;
-            for ($i = 0; $i < $data['config_icon_number']; $i++) {
-                if (!key_exists($i, $mform->_submitValues['icondelete'])) {
-                    for ($j = 0; $j < count($mform->_elements); $j++) {
-                        if (
-                            $mform->_elements[$j]->_type == 'header' &&
-                            $mform->_elements[$j]->_attributes['name'] == 'config_header[' . $i . ']') {
-                            $mform->_elements[$j]->_text = get_string('icon', 'block_floatingbutton') . ' ' . $number;
-                            $number++;
-                        }
+            $skip = array_keys($mform->_submitValues['icondelete']);
+        }
+        if (isset($mform->_submitValues['icondelete-hidden'])) {
+            $skip = array_merge($skip, array_keys($mform->_submitValues['icondelete-hidden']));
+        }
+        // Renumber header entries to avoid gaps in numbering when an icon is deleted.
+        $number = 1;
+        for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
+            if (!in_array($i, $skip)) {
+                for ($j = 0; $j < count($mform->_elements); $j++) {
+                    if (
+                        $mform->_elements[$j]->_type == 'header' &&
+                        $mform->_elements[$j]->_attributes['name'] == 'config_header[' . $i . ']'
+                    ) {
+                        $mform->_elements[$j]->_text = get_string('icon', 'block_floatingbutton') . ' ' . $number;
+                        $number++;
                     }
                 }
+                // Choosing an icon is mandatory.
+                $mform->addRule('config_icon[' . $i . ']', get_string('icon_missing', 'block_floatingbutton'), 'required', 'client');
             }
         }
 
@@ -349,12 +360,14 @@ class block_floatingbutton_edit_form extends block_edit_form {
      * @param string $value The new value of the form element
      * @return void
      */
-    public function set_value($mform, $type, $name, $value): void {
+    public function set_value($mform, $type, $name, $value): void
+    {
         for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
             for ($j = 0; $j < count($mform->_elements); $j++) {
                 if (
                     $mform->_elements[$j]->_type == $type &&
-                    $mform->_elements[$j]->_attributes['name'] == $name) {
+                    $mform->_elements[$j]->_attributes['name'] == $name
+                ) {
                     $mform->_elements[$j]->_attributes['value'] = $value;
                 }
             }
