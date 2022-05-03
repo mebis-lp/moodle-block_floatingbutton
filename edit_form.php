@@ -22,8 +22,7 @@
  * @author     Stefan Hanauska <stefan.hanauska@csg-in.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_floatingbutton_edit_form extends block_edit_form
-{
+class block_floatingbutton_edit_form extends block_edit_form {
 
     /**
      * Form definition - call to parent definition() is avoided here to get
@@ -31,8 +30,7 @@ class block_floatingbutton_edit_form extends block_edit_form
      *
      * @return void
      */
-    public function definition()
-    {
+    public function definition() {
     }
 
     /**
@@ -41,8 +39,7 @@ class block_floatingbutton_edit_form extends block_edit_form
      * @param stdClass $mform
      * @return void
      */
-    protected function specific_definition($mform)
-    {
+    protected function specific_definition($mform) {
         $positionsvertical = [
             'bottom' => get_string('bottom', 'block_floatingbutton'),
             'top' => get_string('top', 'block_floatingbutton')
@@ -101,8 +98,7 @@ class block_floatingbutton_edit_form extends block_edit_form
      *
      * @return array
      */
-    public function get_course_modules()
-    {
+    public function get_course_modules() {
         if (isset($this->courselist)) {
             return;
         }
@@ -147,8 +143,7 @@ class block_floatingbutton_edit_form extends block_edit_form
      *
      * @return void
      */
-    public function definition_after_data()
-    {
+    public function definition_after_data() {
         global $PAGE;
 
         $types = [
@@ -360,8 +355,7 @@ class block_floatingbutton_edit_form extends block_edit_form
      * @param string $value The new value of the form element
      * @return void
      */
-    public function set_value($mform, $type, $name, $value): void
-    {
+    public function set_value($mform, $type, $name, $value): void {
         for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
             for ($j = 0; $j < count($mform->_elements); $j++) {
                 if (
