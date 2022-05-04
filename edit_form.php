@@ -349,6 +349,12 @@ class block_floatingbutton_edit_form extends block_edit_form {
         }
     }
 
+    /**
+     * Overrides the _process_submission() method to remove empty spaces in the arrays in the block config.
+     *
+     * @param string $method
+     * @return void
+     */
     public function _process_submission($method) {
         parent::_process_submission($method);
         $keys = ['icon', 'name', 'type', 'backgroundcolor', 'textcolor', 'externalurl', 'speciallink', 'customlayout', 'cmid'];
