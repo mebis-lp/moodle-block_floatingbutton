@@ -158,7 +158,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
             $speciallinkoptions[$k] = get_string($k, 'block_floatingbutton');
         }
 
-        $mform = &$this->_form;
+        $mform = $this->_form;
 
         $mform->addElement(
             'html',
@@ -336,13 +336,25 @@ class block_floatingbutton_edit_form extends block_edit_form {
         // Set default for custom colors - this is necessary because setting the default value doesn't work
         // when using it in definition_after_data().
         for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
-            if (!isset($data['config_customlayout'][$i]) || $data['config_customlayout'][$i] != 1) {
-                if (!isset($data['config_textcolor'][$i]) || $data['config_textcolor'][$i] == '') {
-                    $this->set_value($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor']);
+            if (!in_array($i, $skip)) {
+                if (!isset($data['config_customlayout'][$i]) || $data['config_customlayout'][$i] != 1) {
+                    if (!isset($data['config_textcolor'][$i]) || $data['config_textcolor'][$i] == '') {
+                        $this->set_value($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor']);
+                    }
+                    if (!isset($data['config_backgroundcolor'][$i]) || $data['config_backgroundcolor'][$i] == '') {
+                        $this->set_value($mform, 'text', 'config_backgroundcolor[' . $i . ']', $data['config_defaultbackgroundcolor']);
+                    }
                 }
-                if (!isset($data['config_backgroundcolor'][$i]) || $data['config_backgroundcolor'][$i] == '') {
-                    $this->set_value($mform, 'text', 'config_backgroundcolor[' . $i . ']', $data['config_defaultbackgroundcolor']);
-                }
+            }
+        }
+    }
+
+    public function _process_submission($method) {
+        parent::_process_submission($method);
+        $keys = ['icon', 'name', 'type', 'backgroundcolor', 'textcolor', 'externalurl', 'speciallink', 'customlayout', 'cmid'];
+        foreach ($keys as $key) {
+            if (isset($this->block->config->$key)) {
+                $this->block->config->$key = array_values($this->block->config->$key);
             }
         }
     }
