@@ -247,6 +247,8 @@ class block_floatingbutton extends block_base {
                 $context->positionvertical = $this->config->positionvertical;
             }
             $this->content->text = $OUTPUT->render_from_template('block_floatingbutton/icons', $context);
+        } else {
+            $this->content->text = '';
         }
 
         return $this->content;
