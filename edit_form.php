@@ -339,10 +339,10 @@ class block_floatingbutton_edit_form extends block_edit_form {
             if (!in_array($i, $skip)) {
                 if (!isset($data['config_customlayout'][$i]) || $data['config_customlayout'][$i] != 1) {
                     if (!isset($data['config_textcolor'][$i]) || $data['config_textcolor'][$i] == '') {
-                        $this->set_value($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor']);
+                        $this->set_value($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor'], true);
                     }
                     if (!isset($data['config_backgroundcolor'][$i]) || $data['config_backgroundcolor'][$i] == '') {
-                        $this->set_value($mform, 'text', 'config_backgroundcolor[' . $i . ']', $data['config_defaultbackgroundcolor']);
+                        $this->set_value($mform, 'text', 'config_backgroundcolor[' . $i . ']', $data['config_defaultbackgroundcolor'], true);
                     }
                 }
             }
@@ -371,16 +371,22 @@ class block_floatingbutton_edit_form extends block_edit_form {
      * @param string $type The type of the form element
      * @param string $name The name of the form element
      * @param string $value The new value of the form element
+     * @param string $onlyempty Only set value if empty
      * @return void
      */
-    public function set_value($mform, $type, $name, $value): void {
+    public function set_value($mform, $type, $name, $value, $onlyempty): void {
         for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
             for ($j = 0; $j < count($mform->_elements); $j++) {
                 if (
                     $mform->_elements[$j]->_type == $type &&
                     $mform->_elements[$j]->_attributes['name'] == $name
                 ) {
-                    $mform->_elements[$j]->_attributes['value'] = $value;
+                    if (
+                        !isset($mform->_elements[$j]->_attributes['value']) ||
+                        empty($mform->_elements[$j]->_attributes['value'])
+                    ) {
+                        $mform->_elements[$j]->_attributes['value'] = $value;
+                    }
                 }
             }
         }
