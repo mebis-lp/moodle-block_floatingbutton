@@ -31,7 +31,7 @@
     transition: transform 0.1s;
     font-size: 25px;
     display: grid;
-    place-content: center; 
+    place-content: center;
 }
 
 .mbs-floatingicons-icon a i, .mbs-floatingicons-icon button i{
@@ -70,16 +70,8 @@
     user-select: none;
 }
 
-.mbs-floatingicons-edit-active {
-    color: black;
-}
-
-.mbs-floatingicons a:hover {
-    color: aliceblue;
-}
-
-.mbs-floatingicons-edit input[type=submit] {
-    background: darkred;
+.mbs-floatingicons-edit-active i {
+    filter: invert(90%);
 }
 
 .mbs-floatingicons-iconpicker {
