@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Block class for block_floatingbutton
  *
@@ -83,9 +81,10 @@ class block_floatingbutton extends block_base {
     /**
      * Returns the block content. Content is cached for performance reasons.
      *
-     * @return string
+     * @return stdClass
      */
     public function get_content() {
+        global $CFG;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -130,9 +129,52 @@ class block_floatingbutton extends block_base {
                 }
                 $url = null;
                 $edit = false;
+                $notavailable = false;
+                $name = null;
                 switch($this->config->type[$i]) {
                     case 'internal':
-                        $url = $this->config->internalurl[$i];
+                        // Skip empty internal links (this could happen, when a course module that is referenced by an icon
+                        // is not included in backup).
+                        if (!is_null($this->config->cmid[$i])) {
+                            list($type, $id) = explode('=', $this->config->cmid[$i]);
+                            switch($type) {
+                                case 'cmid':
+                                    if (in_array($id, array_keys($modinfo->get_cms()))) {
+                                        $module = $modinfo->get_cm($id);
+                                        $name = $module->name;
+                                        $notavailable = !$module->available;
+                                        if (!is_null($module->url)) {
+                                            // Link modules that have a view page to their corresponding url.
+                                            $url = '' . $module->url;
+                                        } else {
+                                            // Other modules (like labels) are shown on the course page. Link to the corresponding
+                                            // anchor.
+                                            $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid .
+                                                '&section=' . $module->sectionnum . '#module-' . $id;
+                                        }
+                                    } else {
+                                        $notavailable = true;
+                                    }
+                                break;
+                                case 'section':
+                                    $sectioninfo = $modinfo->get_section_info($id);
+                                    if (!is_null($sectioninfo)) {
+                                        $name = $sectioninfo->name;
+                                        if (empty($name)) {
+                                            if ($id == 0) {
+                                                $name = get_string('general');
+                                            } else {
+                                                $name = get_string('section') . ' ' . $id;
+                                            }
+                                        }
+                                        $notavailable = !$sectioninfo->available;
+                                        $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid . '&section=' . $id;
+                                    } else {
+                                        $notavailable = true;
+                                    }
+                                break;
+                            }
+                        }
                         break;
                     case 'external':
                         $url = $this->config->externalurl[$i];
@@ -192,18 +234,21 @@ class block_floatingbutton extends block_base {
                     $this->config->defaulttextcolor
                 );
                 $icon = [
-                    'name' => $this->config->name[$i],
+                    'name' => (empty($this->config->name[$i]) ? $name : $this->config->name[$i]),
                     'url' => $url,
                     'icon' => $this->config->icon[$i],
                     'edit' => $edit,
                     'backgroundcolor' => $backgroundcolor,
-                    'textcolor' => $textcolor
+                    'textcolor' => $textcolor,
+                    'notavailable' => $notavailable
                 ];
                 $context->icons[] = $icon;
                 $context->positionhorizontal = $this->config->positionhorizontal;
                 $context->positionvertical = $this->config->positionvertical;
             }
             $this->content->text = $OUTPUT->render_from_template('block_floatingbutton/icons', $context);
+        } else {
+            $this->content->text = '';
         }
 
         return $this->content;

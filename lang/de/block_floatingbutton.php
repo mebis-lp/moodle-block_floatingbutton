@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['addmoreicons'] = 'Weitere icons hinzufügen';
+$string['addmoreicons'] = 'Weiteres Icon hinzufügen';
 $string['back_to_activity_section'] = 'Zurück zum Abschnitt der Aktivität';
 $string['back_to_main_page'] = 'Zurück zur Hauptseite des Kurses';
 $string['backgroundcolor'] = 'Hintergrund';
@@ -45,6 +45,7 @@ $string['floatingbutton:myaddinstance'] = 'Einen Floating Buttons Block zum Dash
 $string['horizontal_space'] = 'Horizontaler Abstand';
 $string['icon'] = 'Icon';
 $string['icon_help'] = 'FontAwesome-Code für das Icon';
+$string['icon_missing'] = 'Ein Icon muss ausgewählt werden';
 $string['left'] = 'Links';
 $string['internalurl'] = 'Abschnitt oder Aktivität';
 $string['internalurl_help'] = 'Abschnitt oder Aktivität auf die das Icon verweisen soll';
@@ -64,8 +65,8 @@ $string['top'] = 'Oben';
 $string['turn_editing_on'] = 'Bearbeiten ein-/ausschalten';
 $string['type'] = 'Link-Typ';
 $string['type_help'] = 'Es gibt drei Arten von Links:<br/>
-- Interne links, die auf Aktivitäten oder Abschnitte des Kurses verweisen<br/>
-- Externe links<br/>
+- Interne Links, die auf Aktivitäten oder Abschnitte des Kurses verweisen<br/>
+- Externe Links<br/>
 - Links auf moodle Functionen (z.B. Bearbeiten ein-/ausschalten)';
 $string['type_internal'] = 'Interner Link';
 $string['type_external'] = 'Externer Link';

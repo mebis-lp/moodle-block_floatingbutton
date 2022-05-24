@@ -15,17 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for block_floatingbutton
+ * Events for block_floatingbutton
  *
- * @package    block_floatingbutton
- * @copyright  2022 ISB Bayern
- * @author     Stefan Hanauska <stefan.hanauska@csg-in.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     block_floatingbutton
+ * @copyright   2021-2022, ISB Bayern
+ * @author      Stefan Hanauska <stefan.hanauska@csg-in.de>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022050201;
-$plugin->requires  = 2014051201;
-$plugin->component = 'block_floatingbutton';
-$plugin->maturity = MATURITY_BETA;
+$observers = [
+    [
+        'eventname' => '\core\event\course_module_deleted',
+        'callback' => '\block_floatingbutton\autoupdate::update_from_delete_event'
+    ]
+];

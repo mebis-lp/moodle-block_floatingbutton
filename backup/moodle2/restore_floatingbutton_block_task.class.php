@@ -88,6 +88,9 @@ class restore_floatingbutton_block_task extends restore_block_task {
 
         $blockid = $this->get_blockid();
 
+        $courseid = $this->get_courseid();
+        $modinfo = get_fast_modinfo($courseid);
+
         if ($configdata = $DB->get_field('block_instances', 'configdata', array('id' => $blockid))) {
             $config = $this->decode_configdata($configdata);
 
@@ -104,6 +107,22 @@ class restore_floatingbutton_block_task extends restore_block_task {
 
             foreach ($config->externalurl as $key => $url) {
                 $config->externalurl[$key] = $decoder->decode_content($url);
+            }
+
+            foreach ($config->cmid as $key => $url) {
+                list($type, $id) = explode('=', $url);
+                if ($type == 'cmid') {
+                    $moduleid = restore_dbops::get_backup_ids_record($this->get_restoreid(), 'course_module', $id);
+                    if ($moduleid) {
+                        $config->cmid[$key] = 'cmid=' . $moduleid->newitemid;
+                    } else {
+                        try {
+                            $modinfo->get_cm($config->cmid);
+                        } catch (Exception $e) {
+                            $modinfo->cmid = null;
+                        }
+                    }
+                }
             }
 
             $configdata = base64_encode(serialize($config));

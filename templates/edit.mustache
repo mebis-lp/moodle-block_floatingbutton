@@ -43,22 +43,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     }
 }}
 <form method="post" href="{{{url}}}">
-<div class="mbs-floatingicons-icon"
-style="
-background: {{^defaultbackgroundcolor}}
-{{^backgroundcolor}}green{{/backgroundcolor}}
-{{backgroundcolor}}
-{{/defaultbackgroundcolor}}
-{{defaultbackgroundcolor}};
-color: {{^defaulttextcolor}}
-{{^textcolor}}green{{/textcolor}}
-{{textcolor}}
-{{/defaulttextcolor}}
-{{defaulttextcolor}};
-">
+<div class="mbs-floatingicons-icon">
     <input type="hidden" name="id" value="{{courseid}}"/>
     <input type="hidden" name="sesskey" value="{{sesskey}}"/>
     <input type="hidden" name="edit" value="{{#editing}}off{{/editing}}{{^editing}}on{{/editing}}"/>
-    <button class="mbs-floatingicons-button" type="submit" title="{{name}}"><i class="{{icon}} {{#editing}} mbs-floatingicons-edit-active{{/editing}}" aria-hidden="true"></i></button>
+    <button class="mbs-floatingicons-button {{#editing}} mbs-floatingicons-edit-active{{/editing}}" type="submit" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};"><i class="{{icon}}" aria-hidden="true"></i></button>
 </div>
 </a>

@@ -47,15 +47,17 @@ style="{{#horizontal_space}}{{positionhorizontal}}: {{horizontal_space}}px;{{/ho
 {{#vertical_space}}{{positionvertical}}: {{vertical_space}}px;{{/vertical_space}}
 ">
 {{#icons}}
-    {{#edit}}
-        {{> block_floatingbutton/edit }}
-    {{/edit}}
-    {{^edit}}
-    <div class="mbs-floatingicons-icon">
-        <a href="{{{url}}}" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};">
-            <i class="{{icon}}" aria-hidden="true"></i>
-        </a>
-    </div>
-    {{/edit}}
+    {{^notavailable}}
+        {{#edit}}
+            {{> block_floatingbutton/edit }}
+        {{/edit}}
+        {{^edit}}
+        <div class="mbs-floatingicons-icon">
+            <a href="{{{url}}}" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};">
+                <i class="{{icon}}" aria-hidden="true"></i>
+            </a>
+        </div>
+        {{/edit}}
+    {{/notavailable}}
 {{/icons}}
 </div>

@@ -15,7 +15,7 @@ export const init = (iconpickerdiv, iconpickerselector) => {
     // Make inputs of the moodle form invisible and add button for iconpicker.
     let inputs = Array.from(document.querySelectorAll('.mbs-floatingicon-input input'));
     inputs.forEach(function (input) {
-        input.setAttribute('style', 'display:none;');
+        input.setAttribute('style', 'visibility: collapse; width: 0; margin: 0; padding: 0; position: absolute;');
         input.insertAdjacentHTML(
             'afterend',
             '<button class="mbs-floatingicons-iconpicker" type="button" id="' + input.id +
