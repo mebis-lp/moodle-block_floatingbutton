@@ -30,8 +30,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
     Example context (json):
     {
-    "positionhorizontal":"left",
-    "positionvertical":"top",
     "icons":[
         {
             "name":"Section 0",
@@ -42,22 +40,20 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     ]
     }
 }}
-<div class="mbs-floatingicons mbs-floatingicons-{{positionhorizontal}} mbs-floatingicons-{{positionvertical}}"
-style="{{#horizontal_space}}{{positionhorizontal}}: {{horizontal_space}}px;{{/horizontal_space}}
-{{#vertical_space}}{{positionvertical}}: {{vertical_space}}px;{{/vertical_space}}
-">
-{{#icons}}
-    {{^notavailable}}
-        {{#edit}}
-            {{> block_floatingbutton/edit }}
-        {{/edit}}
-        {{^edit}}
-        <div class="mbs-floatingicons-icon">
-            <a href="{{{url}}}" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};">
-                <i class="{{icon}}" aria-hidden="true"></i>
-            </a>
-        </div>
-        {{/edit}}
-    {{/notavailable}}
-{{/icons}}
+<div class="mbs-floatingicons">
+    {{#icons}}
+        {{^notavailable}}
+            {{#edit}}
+                {{> block_floatingbutton/edit }}
+            {{/edit}}
+            {{^edit}}
+                <a href="{{{url}}}">
+                    <button title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};"
+                            class="btn btn-icon icon-no-margin mbs_floatingicon-btn">
+                        <i class="icon {{icon}}" aria-hidden="true"></i>
+                    </button>
+                </a>
+            {{/edit}}
+        {{/notavailable}}
+    {{/icons}}
 </div>

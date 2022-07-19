@@ -27,8 +27,9 @@ class block_floatingbutton extends block_base {
      * Initialize block
      *
      * @return void
+     * @throws coding_exception
      */
-    public function init() {
+    public function init(): void {
         $this->title = get_string('floatingbutton', 'block_floatingbutton');
         $this->speciallinks = [
             'turn_editing_on',
@@ -43,29 +44,32 @@ class block_floatingbutton extends block_base {
     /**
      * Allow the block to have a configuration page
      *
-     * @return boolean
+     * @return bool
      */
-    public function has_config() {
+    public function has_config(): bool {
         return true;
     }
 
     /**
-     * Adds the block content to the page header if user is not editing.
+     * Adds the block content to the page header.
      *
      * @return void
+     * @throws coding_exception
+     * @throws moodle_exception
      */
-    public function specialization() {
-        if (!$this->page->user_is_editing()) {
-            $this->page->add_header_action($this->get_content()->text);
+    public function specialization(): void {
+        if (!empty($this->instance->visible)) {
+            $this->get_content();
+            $this->page->add_header_action($this->content->text);
         }
     }
 
     /**
      * Returns true as block shouldn't be shown as block.
      *
-     * @return boolean
+     * @return bool
      */
-    public function is_empty() {
+    public function is_empty(): bool {
         return true;
     }
 
@@ -74,7 +78,7 @@ class block_floatingbutton extends block_base {
      *
      * @return array
      */
-    public function get_special_links() {
+    public function get_special_links(): array {
         return $this->speciallinks;
     }
 
@@ -82,13 +86,17 @@ class block_floatingbutton extends block_base {
      * Returns the block content. Content is cached for performance reasons.
      *
      * @return stdClass
+     * @throws coding_exception
+     * @throws moodle_exception
      */
-    public function get_content() {
-        global $CFG;
-        if ($this->content !== null) {
-            return $this->content;
-        }
+    public function get_content(): stdClass {
         global $OUTPUT;
+        $dummy = new stdClass;
+        $dummy->text = '';
+        if ($this->content !== null) {
+            return $dummy;
+        }
+
         $this->content = new stdClass;
         $context = new stdClass;
 
@@ -100,6 +108,7 @@ class block_floatingbutton extends block_base {
                 $context->cmid = $this->page->cm->id;
                 $context->sectionid = $this->page->cm->sectionnum;
             } else {
+                $context->cmid = null;
                 $context->sectionid = optional_param('section', 0, PARAM_INT);
             }
 
@@ -110,10 +119,6 @@ class block_floatingbutton extends block_base {
                 $context->nextsectionid = $context->sectionid + 1;
             }
         }
-        if (isset($this->config)) {
-            $context->horizontal_space = $this->config->horizontal_space;
-            $context->vertical_space = $this->config->vertical_space;
-        }
         $context->sesskey = sesskey();
 
         if ($this->page->user_allowed_editing()) {
@@ -123,21 +128,22 @@ class block_floatingbutton extends block_base {
         $context->icons = [];
 
         if (!is_null($this->config)) {
+            $format = core_courseformat\base::instance($context->courseid);
             for ($i = 0; $i < $this->config->icon_number; $i++) {
-                if (!isset($this->config->icon[$i]) || $this->config->icon[$i] == '') {
+                if (empty($this->config->icon[$i])) {
                     continue;
                 }
                 $url = null;
                 $edit = false;
                 $notavailable = false;
                 $name = null;
-                switch($this->config->type[$i]) {
+                switch ($this->config->type[$i]) {
                     case 'internal':
                         // Skip empty internal links (this could happen, when a course module that is referenced by an icon
                         // is not included in backup).
                         if (!is_null($this->config->cmid[$i])) {
                             list($type, $id) = explode('=', $this->config->cmid[$i]);
-                            switch($type) {
+                            switch ($type) {
                                 case 'cmid':
                                     if (in_array($id, array_keys($modinfo->get_cms()))) {
                                         $module = $modinfo->get_cm($id);
@@ -149,13 +155,12 @@ class block_floatingbutton extends block_base {
                                         } else {
                                             // Other modules (like labels) are shown on the course page. Link to the corresponding
                                             // anchor.
-                                            $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid .
-                                                '&section=' . $module->sectionnum . '#module-' . $id;
+                                            $url = $format->get_view_url($module->sectionnum) . '#module-' . $id;
                                         }
                                     } else {
                                         $notavailable = true;
                                     }
-                                break;
+                                    break;
                                 case 'section':
                                     $sectioninfo = $modinfo->get_section_info($id);
                                     if (!is_null($sectioninfo)) {
@@ -168,11 +173,11 @@ class block_floatingbutton extends block_base {
                                             }
                                         }
                                         $notavailable = !$sectioninfo->available;
-                                        $url = $CFG->wwwroot . '/course/view.php?id=' . $context->courseid . '&section=' . $id;
+                                        $url = $format->get_view_url($id);
                                     } else {
                                         $notavailable = true;
                                     }
-                                break;
+                                    break;
                             }
                         }
                         break;
@@ -180,56 +185,55 @@ class block_floatingbutton extends block_base {
                         $url = $this->config->externalurl[$i];
                         break;
                     case 'special':
-                        switch($this->config->speciallink[$i]) {
+                        switch ($this->config->speciallink[$i]) {
                             case 'turn_editing_on':
                                 $url = '' . (new moodle_url('/course/view.php'));
                                 $edit = true;
+                                $notavailable = !$this->page->user_allowed_editing();
                                 break;
                             case 'next_section':
                                 if (isset($context->nextsectionid)) {
-                                    $url = '' . (new moodle_url(
-                                    '/course/view.php',
-                                    ['id' => $context->courseid, 'section' => $context->nextsectionid]
-                                    ));
+                                    $url = $format->get_view_url($context->nextsectionid);
+                                    $name = get_string('nextsection');
                                 }
                                 break;
                             case 'previous_section':
                                 if (isset($context->prevsectionid)) {
-                                    $url = '' . (new moodle_url(
-                                    '/course/view.php',
-                                    ['id' => $context->courseid, 'section' => $context->prevsectionid]
-                                    ));
+                                    $url = $format->get_view_url($context->prevsectionid);
+                                    $name = get_string('previoussection');
                                 }
                                 break;
                             case 'back_to_main_page':
                                 $url = '' . (new moodle_url(
-                                    '/course/view.php',
-                                    ['id' => $context->courseid]
-                                ));
+                                        '/course/view.php',
+                                        ['id' => $context->courseid]
+                                    ));
+                                $name = get_string('back_to_main_page', 'block_floatingbutton');
                                 break;
                             case 'back_to_activity_section':
                                 if (!is_null($context->cmid)) {
-                                    $url = '' . (new moodle_url(
-                                    '/course/view.php',
-                                    ['id' => $context->section]
-                                    ));
+                                    $url = $format->get_view_url($context->sectionid);
+                                    $name = get_string('back_to_activity_section', 'block_floatingbutton');
+                                } else {
+                                    $notavailable = true;
                                 }
                                 break;
                             case 'change_editor':
                                 $url = '' . (new moodle_url(
-                                    '/user/editor.php',
-                                    ['course' => $context->courseid])
-                                );
+                                        '/user/editor.php',
+                                        ['course' => $context->courseid])
+                                    );
+                                $name = get_string('editorpreferences');
                                 break;
                         }
                 }
                 $backgroundcolor = (
-                    $this->config->customlayout[$i] == 1 ?
+                $this->config->customlayout[$i] == 1 ?
                     $this->config->backgroundcolor[$i] :
                     $this->config->defaultbackgroundcolor
                 );
                 $textcolor = (
-                    $this->config->customlayout[$i] == 1 ?
+                $this->config->customlayout[$i] == 1 ?
                     $this->config->textcolor[$i] :
                     $this->config->defaulttextcolor
                 );
@@ -243,23 +247,21 @@ class block_floatingbutton extends block_base {
                     'notavailable' => $notavailable
                 ];
                 $context->icons[] = $icon;
-                $context->positionhorizontal = $this->config->positionhorizontal;
-                $context->positionvertical = $this->config->positionvertical;
             }
             $this->content->text = $OUTPUT->render_from_template('block_floatingbutton/icons', $context);
         } else {
             $this->content->text = '';
         }
 
-        return $this->content;
+        return $dummy;
     }
 
     /**
      * Returns false as there can be only one floating button block on one page to avoid collisions.
      *
-     * @return void
+     * @return bool
      */
-    public function instance_allow_multiple() {
+    public function instance_allow_multiple(): bool {
         return false;
     }
 
@@ -268,7 +270,7 @@ class block_floatingbutton extends block_base {
      *
      * @return array
      */
-    public function applicable_formats() {
+    public function applicable_formats(): array {
         return ['site-index' => false, 'course-view' => true, 'mod' => true];
     }
 }
