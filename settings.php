@@ -30,14 +30,14 @@ if ($ADMIN->fulltree) {
         'block_floatingbutton/defaulttextcolor',
         get_string('defaulttextcolor', 'block_floatingbutton'),
         '',
-        '#ffffff',
+        '#1C1D2F',
         PARAM_TEXT)
     );
     $settings->add(new admin_setting_configtext(
         'block_floatingbutton/defaultbackgroundcolor',
         get_string('defaultbackgroundcolor', 'block_floatingbutton'),
         '',
-        '#00a8d5',
+        '#A4A5AC',
         PARAM_TEXT)
     );
 }

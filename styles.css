@@ -1,73 +1,28 @@
 .mbs-floatingicons {
     position: fixed;
+    bottom: calc(2rem + 36px);
+    right: 2rem;
+    width: 36px;
+    transition: 0.2s;
     z-index: 1000;
 }
 
-.mbs-floatingicons-bottom {
-    bottom: 20px;
-}
-
-.mbs-floatingicons-right {
-    right: 20px;
-}
-
-.mbs-floatingicons-top {
-    top: 120px;
-}
-
-.mbs-floatingicons-left {
-    left: 80px;
-}
-
-.mbs-floatingicons-icon a, .mbs-floatingicons-icon button{
-    border-radius: 100%;
-    background: #00a8d5;
-    padding: 4px;
-    margin: 4px;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    float: none;
-    transition: transform 0.1s;
-    font-size: 25px;
-    display: grid;
-    place-content: center;
-}
-
-.mbs-floatingicons-icon a i, .mbs-floatingicons-icon button i{
-    font-size: 25px;
-    width: 100%;
-    height: 100%;
-}
-
-.mbs-floatingicons-icon a:hover, .mbs-floatingicons-icon button:hover {
-    transform: scale(1.1);
-}
-
-.mbs-floatingicons a:link {
-    text-decoration: none;
-}
-
-.mbs-floatingicons a {
-    color: aliceblue;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.drawer-right.show .mbs-floatingicons,
+.show-drawer-right .mbs-floatingicons {
+    right: calc(315px + 2rem);
 }
 
 .mbs-floatingicons button {
-    background: none;
-    border: none;
-    color: aliceblue;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    margin-bottom: 2px;
+}
+
+.mbs_floatingicon-btn {
+    word-wrap: break-word;
+    float: none;
+}
+
+.mbs_floatingicon-btn:hover {
+    filter: hue-rotate(10deg) brightness(90%);
 }
 
 .mbs-floatingicons-edit-active i {

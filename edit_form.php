@@ -30,26 +30,16 @@ class block_floatingbutton_edit_form extends block_edit_form {
      *
      * @return void
      */
-    public function definition() {
+    public function definition(): void {
     }
 
     /**
      * Add specific elements to the standard block form
      *
-     * @param stdClass $mform
+     * @param MoodleQuickForm $mform
      * @return void
      */
-    protected function specific_definition($mform) {
-        $positionsvertical = [
-            'bottom' => get_string('bottom', 'block_floatingbutton'),
-            'top' => get_string('top', 'block_floatingbutton')
-        ];
-
-        $positionshorizontal = [
-            'right' => get_string('right', 'block_floatingbutton'),
-            'left' => get_string('left', 'block_floatingbutton')
-        ];
-
+    protected function specific_definition($mform): void {
         $mform->addElement('header', 'config_header', get_string('blocksettings', 'block'));
         $mform->addElement(
             'text',
@@ -67,43 +57,17 @@ class block_floatingbutton_edit_form extends block_edit_form {
         );
         $mform->setDefault('config_defaulttextcolor', get_config('block_floatingbutton', 'defaulttextcolor'));
         $mform->setType('config_defaulttextcolor', PARAM_TEXT);
-        $mform->addElement(
-            'select',
-            'config_positionvertical',
-            get_string('positionvertical', 'block_floatingbutton'),
-            $positionsvertical
-        );
-        $mform->addElement(
-            'select',
-            'config_positionhorizontal',
-            get_string('positionhorizontal', 'block_floatingbutton'),
-            $positionshorizontal
-        );
-        $mform->addElement(
-            'text',
-            'config_horizontal_space',
-            get_string('horizontal_space', 'block_floatingbutton')
-        );
-        $mform->setType('config_horizontalspace', PARAM_INT);
-        $mform->addElement(
-            'text',
-            'config_vertical_space',
-            get_string('vertical_space', 'block_floatingbutton')
-        );
-        $mform->setType('config_verticalspace', PARAM_INT);
     }
 
     /**
      * Loads the modules of the corresponding course (if there is one).
      *
-     * @return array
+     * @return void
      */
-    public function get_course_modules() {
+    public function generate_course_module_list(): void {
         if (isset($this->courselist)) {
             return;
         }
-
-        global $CFG;
 
         if (!is_null($this->page->course)) {
             $this->iscourse = true;
@@ -142,9 +106,13 @@ class block_floatingbutton_edit_form extends block_edit_form {
      * Called when data / defaults are already loaded.
      *
      * @return void
+     * @throws coding_exception
+     * @throws dml_exception
      */
-    public function definition_after_data() {
+    public function definition_after_data(): void {
+        // phpcs:disable
         global $PAGE;
+        // phpcs:enable
 
         $types = [
             'internal' => get_string('type_internal', 'block_floatingbutton'),
@@ -167,7 +135,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
 
         $data = $mform->_defaultValues;
 
-        $this->get_course_modules();
+        $this->generate_course_module_list();
 
         $repeatarray = [];
         $repeatarray[] = $mform->createElement(
@@ -290,12 +258,14 @@ class block_floatingbutton_edit_form extends block_edit_form {
         );
 
         // Global $PAGE has to be kept here because $this->page doesn't work to load the JS modules.
+        // phpcs:disable
         $PAGE->requires->js_call_amd(
             'block_floatingbutton/iconpicker',
             'init',
             ['.mbs-iconpicker-container', '.mbs-floatingicons-iconpicker']
         );
         $PAGE->requires->js_call_amd('block_floatingbutton/colorpicker', 'init', []);
+        // phpcs:enable
 
         // Calling this method here keeps the order with icons being shown first in form.
         parent::definition();
@@ -329,7 +299,12 @@ class block_floatingbutton_edit_form extends block_edit_form {
                     }
                 }
                 // Choosing an icon is mandatory.
-                $mform->addRule('config_icon[' . $i . ']', get_string('icon_missing', 'block_floatingbutton'), 'required', 'client');
+                $mform->addRule(
+                    'config_icon[' . $i . ']',
+                    get_string('icon_missing', 'block_floatingbutton'),
+                    'required',
+                    'client'
+                );
             }
         }
 
@@ -342,12 +317,20 @@ class block_floatingbutton_edit_form extends block_edit_form {
                         $this->set_value($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor'], true);
                     }
                     if (!isset($data['config_backgroundcolor'][$i]) || $data['config_backgroundcolor'][$i] == '') {
-                        $this->set_value($mform, 'text', 'config_backgroundcolor[' . $i . ']', $data['config_defaultbackgroundcolor'], true);
+                        $this->set_value($mform,
+                            'text',
+                            'config_backgroundcolor[' . $i . ']',
+                            $data['config_defaultbackgroundcolor'],
+                            true
+                        );
                     }
                 }
             }
         }
+        $this->set_value($mform, 'text', 'config_defaultbackgroundcolor', $data['config_defaultbackgroundcolor']);
+        $this->set_value($mform, 'text', 'config_defaulttextcolor', $data['config_defaulttextcolor']);
     }
+    // phpcs:disable
 
     /**
      * Overrides the _process_submission() method to remove empty spaces in the arrays in the block config.
@@ -355,7 +338,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
      * @param string $method
      * @return void
      */
-    public function _process_submission($method) {
+    function _process_submission($method): void {
+        // phpcs:enable
         parent::_process_submission($method);
         $keys = ['icon', 'name', 'type', 'backgroundcolor', 'textcolor', 'externalurl', 'speciallink', 'customlayout', 'cmid'];
         foreach ($keys as $key) {
@@ -367,14 +351,15 @@ class block_floatingbutton_edit_form extends block_edit_form {
 
     /**
      * Sets a value directly in the moodleform object (to be called from definition_after_data)
-     * @param moodleform $mform The moodleform to change
+     *
+     * @param MoodleQuickForm $mform The MoodleQuickForm to change
      * @param string $type The type of the form element
      * @param string $name The name of the form element
      * @param string $value The new value of the form element
-     * @param string $onlyempty Only set value if empty
+     * @param bool $onlyempty Only set value if empty
      * @return void
      */
-    public function set_value($mform, $type, $name, $value, $onlyempty): void {
+    public function set_value(MoodleQuickForm $mform, string $type, string $name, string $value, bool $onlyempty = false): void {
         for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
             for ($j = 0; $j < count($mform->_elements); $j++) {
                 if (
@@ -382,13 +367,34 @@ class block_floatingbutton_edit_form extends block_edit_form {
                     $mform->_elements[$j]->_attributes['name'] == $name
                 ) {
                     if (
-                        !isset($mform->_elements[$j]->_attributes['value']) ||
-                        empty($mform->_elements[$j]->_attributes['value'])
+                        (!isset($mform->_elements[$j]->_attributes['value']) ||
+                            empty($mform->_elements[$j]->_attributes['value'])) && $onlyempty
+                        ||
+                        !$onlyempty
                     ) {
                         $mform->_elements[$j]->_attributes['value'] = $value;
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Validate form data.
+     *
+     * @param array $data
+     * @param array $files
+     * @throws coding_exception
+     */
+    public function validation($data, $files): array {
+        $errors = [];
+        for ($i = 0; $i < count($data['config_name']); $i++) {
+            if (isset($data['config_type'][$i]) &&
+                $data['config_type'][$i] == 'external' &&
+                empty($data['config_externalurl'][$i])) {
+                $errors['config_externalurl[' . $i . ']'] = get_string('missing_externalurl', 'block_floatingbutton');
+            }
+        }
+        return $errors;
     }
 }

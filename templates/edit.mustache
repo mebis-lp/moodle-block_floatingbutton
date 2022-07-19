@@ -30,8 +30,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
     Example context (json):
     {
-    "positionhorizontal":"left",
-    "positionvertical":"top",
     "icons":[
         {
             "name":"Section 0",
@@ -43,10 +41,11 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     }
 }}
 <form method="post" href="{{{url}}}">
-<div class="mbs-floatingicons-icon">
     <input type="hidden" name="id" value="{{courseid}}"/>
     <input type="hidden" name="sesskey" value="{{sesskey}}"/>
     <input type="hidden" name="edit" value="{{#editing}}off{{/editing}}{{^editing}}on{{/editing}}"/>
-    <button class="mbs-floatingicons-button {{#editing}} mbs-floatingicons-edit-active{{/editing}}" type="submit" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};"><i class="{{icon}}" aria-hidden="true"></i></button>
-</div>
-</a>
+    <button type="submit" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};" {{!
+            }}class="{{#editing}} mbs-floatingicons-edit-active{{/editing}} btn btn-icon icon-no-margin mbs_floatingicon-btn">
+        <i class="icon {{icon}}" aria-hidden="true"></i>
+    </button>
+</form>
