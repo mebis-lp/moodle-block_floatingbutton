@@ -149,9 +149,10 @@ class block_floatingbutton extends block_base {
                                         $module = $modinfo->get_cm($id);
                                         $name = $module->name;
                                         $notavailable = !$module->available;
-                                        if (!is_null($module->url)) {
+                                        // Call get_url() so at least once obtain_dynamic_data() is called.
+                                        if (!is_null($module->get_url())) {
                                             // Link modules that have a view page to their corresponding url.
-                                            $url = '' . $module->url;
+                                            $url = $module->url->out();
                                         } else {
                                             // Other modules (like labels) are shown on the course page. Link to the corresponding
                                             // anchor.
