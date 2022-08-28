@@ -106,17 +106,17 @@ class block_floatingbutton extends block_base {
 
             if ($this->page->cm) {
                 $context->cmid = $this->page->cm->id;
-                $context->sectionid = $this->page->cm->sectionnum;
+                $context->sectionnum = $this->page->cm->sectionnum;
             } else {
                 $context->cmid = null;
-                $context->sectionid = optional_param('section', 0, PARAM_INT);
+                $context->sectionnum = optional_param('section', 0, PARAM_INT);
             }
 
-            if ($context->sectionid > 0) {
-                $context->prevsectionid = $context->sectionid - 1;
+            if ($context->sectionnum > 0) {
+                $context->prevsectionnum = $context->sectionnum - 1;
             }
-            if ($context->sectionid < count($modinfo->get_section_info_all()) - 1) {
-                $context->nextsectionid = $context->sectionid + 1;
+            if ($context->sectionnum < count($modinfo->get_section_info_all()) - 1) {
+                $context->nextsectionnum = $context->sectionnum + 1;
             }
         }
         $context->sesskey = sesskey();
@@ -137,6 +137,27 @@ class block_floatingbutton extends block_base {
                 $edit = false;
                 $notavailable = false;
                 $name = null;
+                $section = null;
+                // All sections are shown on one page.
+                $options = $format->get_format_options();
+                $tiles = $format->get_format() == 'tiles';
+                /*
+                * format_tiles is collapsed by default when user is not editing (but does not have COURSE_DISPLAY_SINGLEPAGE set).
+                  format_topcoll is collapsed, but does neither have COURSE_DISPLAY_SINGLEPAGE set.
+                  format_onetopic is never collapsed but has COURSE_DISPLAY_SINGLEPAGE (incorrectly) set.
+                  Other formats should be maybe collapsed if coursedisplay is set to COURSE_DISPLAY_SINGLEPAGE.
+                  If they are not collapsed, opening the section does have no effect and the corresponding anchor is jumped to.
+                */
+                $collapsed = $tiles && !$this->page->user_is_editing() ||
+                    $format->get_format() == 'topcoll' ||
+                    (isset($options['coursedisplay']) &&
+                    $options['coursedisplay'] == COURSE_DISPLAY_SINGLEPAGE &&
+                    $format->get_format() != 'onetopic');
+                $sectionnav = false;
+                $anchor = '';
+                $internal = false;
+                $prevsection = false;
+
                 switch ($this->config->type[$i]) {
                     case 'internal':
                         // Skip empty internal links (this could happen, when a course module that is referenced by an icon
@@ -149,6 +170,8 @@ class block_floatingbutton extends block_base {
                                         $module = $modinfo->get_cm($id);
                                         $name = $module->name;
                                         $notavailable = !$module->available;
+                                        $section = $module->sectionnum;
+                                        $internal = true;
                                         // Call get_url() so at least once obtain_dynamic_data() is called.
                                         if (!is_null($module->get_url())) {
                                             // Link modules that have a view page to their corresponding url.
@@ -156,7 +179,9 @@ class block_floatingbutton extends block_base {
                                         } else {
                                             // Other modules (like labels) are shown on the course page. Link to the corresponding
                                             // anchor.
-                                            $url = $format->get_view_url($module->sectionnum) . '#module-' . $id;
+                                            $url = $format->get_view_url($module->sectionnum);
+                                            $anchor = 'module-' . $id;
+                                            $url->set_anchor($anchor);
                                         }
                                     } else {
                                         $notavailable = true;
@@ -175,6 +200,9 @@ class block_floatingbutton extends block_base {
                                         }
                                         $notavailable = !$sectioninfo->available;
                                         $url = $format->get_view_url($id);
+                                        $internal = true;
+                                        $anchor = 'section-' . $id;
+                                        $section = $id;
                                     } else {
                                         $notavailable = true;
                                     }
@@ -188,64 +216,75 @@ class block_floatingbutton extends block_base {
                     case 'special':
                         switch ($this->config->speciallink[$i]) {
                             case 'turn_editing_on':
-                                $url = '' . (new moodle_url('/course/view.php'));
+                                $url = (new moodle_url('/course/view.php'))->out();
                                 $edit = true;
                                 $notavailable = !$this->page->user_allowed_editing();
                                 break;
                             case 'next_section':
-                                if (isset($context->nextsectionid)) {
-                                    $url = $format->get_view_url($context->nextsectionid);
+                                if (isset($context->nextsectionnum)) {
+                                    $url = $format->get_view_url($context->nextsectionnum);
                                     $name = get_string('nextsection');
                                 }
+                                $sectionnav = true;
+                                $internal = true;
                                 break;
                             case 'previous_section':
-                                if (isset($context->prevsectionid)) {
-                                    $url = $format->get_view_url($context->prevsectionid);
+                                if (isset($context->prevsectionnum)) {
+                                    $url = $format->get_view_url($context->prevsectionnum);
                                     $name = get_string('previoussection');
                                 }
+                                $sectionnav = true;
+                                $internal = true;
+                                $prevsection = true;
                                 break;
                             case 'back_to_main_page':
-                                $url = '' . (new moodle_url(
+                                $url = (new moodle_url(
                                         '/course/view.php',
-                                        ['id' => $context->courseid]
-                                    ));
+                                        ['id' => $context->courseid])
+                                    )->out();
                                 $name = get_string('back_to_main_page', 'block_floatingbutton');
                                 break;
                             case 'back_to_activity_section':
                                 if (!is_null($context->cmid)) {
-                                    $url = $format->get_view_url($context->sectionid);
+                                    $url = $format->get_view_url($context->sectionnum);
                                     $name = get_string('back_to_activity_section', 'block_floatingbutton');
                                 } else {
                                     $notavailable = true;
                                 }
                                 break;
                             case 'change_editor':
-                                $url = '' . (new moodle_url(
+                                $url = (new moodle_url(
                                         '/user/editor.php',
                                         ['course' => $context->courseid])
-                                    );
+                                    )->out();
                                 $name = get_string('editorpreferences');
                                 break;
                         }
                 }
-                $backgroundcolor = (
-                $this->config->customlayout[$i] == 1 ?
+                $backgroundcolor =
+                    $this->config->customlayout[$i] == 1 ?
                     $this->config->backgroundcolor[$i] :
-                    $this->config->defaultbackgroundcolor
-                );
-                $textcolor = (
-                $this->config->customlayout[$i] == 1 ?
+                    $this->config->defaultbackgroundcolor;
+                $textcolor =
+                    $this->config->customlayout[$i] == 1 ?
                     $this->config->textcolor[$i] :
-                    $this->config->defaulttextcolor
-                );
+                    $this->config->defaulttextcolor;
                 $icon = [
-                    'name' => (empty($this->config->name[$i]) ? $name : $this->config->name[$i]),
+                    'name' => empty($this->config->name[$i]) ? $name : $this->config->name[$i],
                     'url' => $url,
                     'icon' => $this->config->icon[$i],
                     'edit' => $edit,
                     'backgroundcolor' => $backgroundcolor,
                     'textcolor' => $textcolor,
-                    'notavailable' => $notavailable
+                    'notavailable' => $notavailable,
+                    'id' => $i,
+                    'section' => $section,
+                    'collapsed' => $collapsed,
+                    'anchor' => $anchor,
+                    'sectionnav' => $sectionnav,
+                    'internal' => $internal,
+                    'prevsection' => $prevsection,
+                    'tiles' => $tiles
                 ];
                 $context->icons[] = $icon;
             }

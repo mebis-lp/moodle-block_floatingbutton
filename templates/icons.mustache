@@ -47,13 +47,59 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
                 {{> block_floatingbutton/edit }}
             {{/edit}}
             {{^edit}}
-                <a href="{{{url}}}">
-                    <button title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};"
-                            class="btn btn-icon icon-no-margin mbs_floatingicon-btn">
+                <a {{^internal}}href="{{{url}}}" {{/internal}}{{#internal}}{{^collapsed}}href="{{{url}}}" {{/collapsed}}{{/internal}} id="mbs_floatingicon-{{id}}">
+                    <button title="{{name}}" style="background-color: {{backgroundcolor}}; color: {{textcolor}};"
+                            class="btn btn-icon icon-no-margin mbs_floatingicon-btn" type="button">
                         <i class="icon {{icon}}" aria-hidden="true"></i>
                     </button>
                 </a>
             {{/edit}}
+            {{#js}}
+                {{#collapsed}}
+                {{#internal}}
+                require(['jquery'], function($) {
+                    $('#mbs_floatingicon-{{id}} button').click(function() {
+                        {{#sectionnav}}
+                        {{#tiles}}
+                            {{#prevsection}}
+                            $('.tile.selected').prevAll('.tile').first().click();
+                            {{/prevsection}}
+                            {{^prevsection}}
+                            if ($('.tile.selected').length == 0) {
+                                    $('#tile-1').click();
+                            } else {
+                                $('.tile.selected').nextAll('.tile').first().click();
+                            }
+                            {{/prevsection}}
+                        {{/tiles}}
+                        {{^tiles}}
+                            let sections = $('[id^="section-"]');
+                            {{#prevsection}}
+                            sections = $(sections.get().reverse());
+                            {{/prevsection}}
+                            sections.each(function() {
+                                if($(this).position().top + $('#page').position().top {{^prevsection}}>{{/prevsection}}{{#prevsection}}<-{{/prevsection}}10) {
+                                    document.getElementById($(this)[0].id).scrollIntoView(true);
+                                    let section = $(this)[0].id.split("-")[1];
+                                    $('.collapsed#collapssesection' + section).click();
+                                    $('.ctopics #toggle-' + section + ' .toggle_closed').click();
+                                    return false;
+                                }
+                            });
+                        {{/tiles}}
+                        {{/sectionnav}}
+                        {{^sectionnav}}
+                        $('.collapsed#collapssesection{{section}},#tile-{{section}}:not(.selected)').click();
+                        $('.ctopics #toggle-{{section}} .toggle_closed').click();
+                        setTimeout(function() {
+                            document.getElementById('{{anchor}}').scrollIntoView(true);
+                        }, (M.course.format.get_config().container_class == 'tiles' ? 2000 : 500));
+                        {{/sectionnav}}
+                    });
+                });
+                {{/internal}}
+                {{/collapsed}}
+            {{/js}}
         {{/notavailable}}
     {{/icons}}
 </div>
