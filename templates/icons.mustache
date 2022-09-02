@@ -73,7 +73,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
                             {{/prevsection}}
                         {{/tiles}}
                         {{^tiles}}
-                            var navbarheight = Math.ceil($('.navbar').height() / 10) * 10;
+                            var navbarheight = 80;
+                            if ($('.navbar').height() != undefined) {
+                                Math.ceil($('.navbar').height() / 10) * 10;
+                            }
                             let sections = $('[id^="section-"]');
                             {{#prevsection}}
                             sections = $(sections.get().reverse());
