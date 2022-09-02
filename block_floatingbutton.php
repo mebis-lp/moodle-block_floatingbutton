@@ -148,11 +148,12 @@ class block_floatingbutton extends block_base {
                   Other formats should be maybe collapsed if coursedisplay is set to COURSE_DISPLAY_SINGLEPAGE.
                   If they are not collapsed, opening the section does have no effect and the corresponding anchor is jumped to.
                 */
-                $collapsed = $tiles && !$this->page->user_is_editing() ||
+                $collapsed = is_null($this->page->cm) && (
+                    $tiles && !$this->page->user_is_editing() ||
                     $format->get_format() == 'topcoll' ||
                     (isset($options['coursedisplay']) &&
                     $options['coursedisplay'] == COURSE_DISPLAY_SINGLEPAGE &&
-                    $format->get_format() != 'onetopic');
+                    $format->get_format() != 'onetopic'));
                 $sectionnav = false;
                 $anchor = '';
                 $internal = false;
