@@ -73,12 +73,13 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
                             {{/prevsection}}
                         {{/tiles}}
                         {{^tiles}}
+                            var navbarheight = Math.ceil($('.navbar').height() / 10) * 10;
                             let sections = $('[id^="section-"]');
                             {{#prevsection}}
                             sections = $(sections.get().reverse());
                             {{/prevsection}}
                             sections.each(function() {
-                                if($(this).position().top + $('#page').position().top {{^prevsection}}>{{/prevsection}}{{#prevsection}}<-{{/prevsection}}80) {
+                                if($(this).position().top + $('#page').position().top {{^prevsection}}>{{/prevsection}}{{#prevsection}}<-{{/prevsection}}navbarheight) {
                                     document.getElementById($(this)[0].id).scrollIntoView(true);
                                     let section = $(this)[0].id.split("-")[1];
                                     $('.collapsed#collapssesection' + section).click();
