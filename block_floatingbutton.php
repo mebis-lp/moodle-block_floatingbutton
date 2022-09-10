@@ -177,6 +177,7 @@ class block_floatingbutton extends block_base {
                                         if (!is_null($module->get_url())) {
                                             // Link modules that have a view page to their corresponding url.
                                             $url = $module->url->out();
+                                            $collapsed = false;
                                         } else {
                                             // Other modules (like labels) are shown on the course page. Link to the corresponding
                                             // anchor.
