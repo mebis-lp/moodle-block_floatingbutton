@@ -90,7 +90,7 @@ class block_floatingbutton extends block_base {
      * @throws moodle_exception
      */
     public function get_content(): stdClass {
-        global $OUTPUT;
+        global $OUTPUT, $CFG;
         $dummy = new stdClass;
         $dummy->text = '';
         if ($this->content !== null) {
@@ -158,6 +158,7 @@ class block_floatingbutton extends block_base {
                 $anchor = '';
                 $internal = false;
                 $prevsection = false;
+                $external = false;
 
                 switch ($this->config->type[$i]) {
                     case 'internal':
@@ -214,6 +215,9 @@ class block_floatingbutton extends block_base {
                         break;
                     case 'external':
                         $url = $this->config->externalurl[$i];
+                        // Be aware that stripos returns 0 in most cases when wwwroot is found
+                        // as it is in the first position of the url.
+                        $external = stripos($url, $CFG->wwwroot) === false;
                         break;
                     case 'special':
                         switch ($this->config->speciallink[$i]) {
@@ -286,7 +290,8 @@ class block_floatingbutton extends block_base {
                     'sectionnav' => $sectionnav,
                     'internal' => $internal,
                     'prevsection' => $prevsection,
-                    'tiles' => $tiles
+                    'tiles' => $tiles,
+                    'external' => $external
                 ];
                 $context->icons[] = $icon;
             }
