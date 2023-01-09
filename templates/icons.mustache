@@ -30,14 +30,32 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
     Example context (json):
     {
-    "icons":[
-        {
-            "name":"Section 0",
-            "url":"https://localhost/...",
-            "icon":"fa-globe",
-            "iconstyle":"background:green;"
-        }
-    ]
+        "courseid":"2",
+        "cmid":null,
+        "sectionnum":0,
+        "nextsectionnum":1,
+        "sesskey":"ABCDE",
+        "editing":true,
+        "icons":[
+            {
+                "name":"Test",
+                "url":{},
+                "icon":"fa fa-arrows",
+                "edit":false,
+                "backgroundcolor":"#a4a5ac",
+                "textcolor":"#1c1d2f",
+                "notavailable":false,
+                "id":0,
+                "section":"0",
+                "collapsed":true,
+                "anchor":"section-0",
+                "sectionnav":false,
+                "internal":true,
+                "prevsection":false,
+                "tiles":false,
+                "external":false
+            }
+        ]
     }
 }}
 <div class="mbs-floatingicons">
@@ -48,10 +66,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
             {{/edit}}
             {{^edit}}
                 <a {{^internal}}href="{{{url}}}" {{/internal}}{{#internal}}{{^collapsed}}href="{{{url}}}" {{/collapsed}}{{/internal}} id="mbs_floatingicon-{{id}}"{{#external}} target="_blank" rel="noopener noreferrer"{{/external}}>
-                    <button title="{{name}}" style="background-color: {{backgroundcolor}}; color: {{textcolor}};"
-                            class="btn btn-icon icon-no-margin mbs_floatingicon-btn" type="button">
+                    <div title="{{name}}" style="background-color: {{backgroundcolor}}; color: {{textcolor}};"
+                            class="btn btn-icon icon-no-margin mbs_floatingicon-btn">
                         <i class="icon {{icon}}" aria-hidden="true"></i>
-                    </button>
+                    </div>
                 </a>
             {{/edit}}
             {{#js}}

@@ -23,6 +23,26 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_floatingbutton_edit_form extends block_edit_form {
+    /**
+     * Array of course modules and sections
+     *
+     * @var array
+     */
+    protected $courselist;
+
+    /**
+     * Whether the page is a course page
+     *
+     * @var bool
+     */
+    protected $iscourse;
+
+    /**
+     * The block we are editing
+     *
+     * @var block_floatingbutton
+     */
+    protected $block;
 
     /**
      * Form definition - call to parent definition() is avoided here to get

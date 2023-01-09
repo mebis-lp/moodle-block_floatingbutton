@@ -1,4 +1,4 @@
-import { exception as displayException } from 'core/notification';
+import {exception as displayException} from 'core/notification';
 import Templates from 'core/templates';
 import ICON_SET from 'block_floatingbutton/iconset';
 
@@ -45,27 +45,16 @@ export const init = (iconpickerdiv, iconpickerselector) => {
                     body: html,
                     footer: '',
                 }, trigger)
-                    .done(function (modal) {
+                    .done(function(modal) {
                         iconpickermodal = modal;
-                        modal.getRoot().on('modal:shown', function () {
+                        modal.getRoot().on('modal:shown', function() {
                             // Listeners for the icons and the search input have to be registered when modal is shown for the first
                             // time because modal doesn't exist in the DOM before.
                             if (!clickSet) {
                                 let search = document.querySelector('#mbs-iconpicker-search');
-                                search.addEventListener('input', function() {
-                                    let icons = Array.from(document.querySelectorAll('.mbs-iconpicker-icon'));
-                                    icons.forEach(function(icon) {
-                                        if(
-                                            icon.getAttribute('data-search').includes(search.value)
-                                        ) {
-                                            icon.setAttribute('style', '');
-                                        } else {
-                                            icon.setAttribute('style', 'display: none;');
-                                        }
-                                    });
-                                });
+                                search.addEventListener('input', searchicon);
                                 let icons = Array.from(document.querySelectorAll('.mbs-iconpicker-icon'));
-                                icons.forEach(function (icon) {
+                                icons.forEach(function(icon) {
                                     icon.addEventListener('click', iconclick);
                                 });
                                 clickSet = true;
@@ -76,6 +65,23 @@ export const init = (iconpickerdiv, iconpickerselector) => {
             return true;
         }).catch(ex => displayException(ex));
 };
+
+/**
+ * Show only icons that match the search value
+ */
+function searchicon() {
+    let search = document.querySelector('#mbs-iconpicker-search');
+    let icons = Array.from(document.querySelectorAll('.mbs-iconpicker-icon'));
+    icons.forEach(function(icon) {
+        if (
+            icon.getAttribute('data-search').includes(search.value)
+        ) {
+            icon.setAttribute('style', '');
+        } else {
+            icon.setAttribute('style', 'display: none;');
+        }
+    });
+}
 
 /**
  * Adds class "highlight" to currently selected icon.
