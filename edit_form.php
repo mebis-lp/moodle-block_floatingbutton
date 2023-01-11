@@ -305,6 +305,12 @@ class block_floatingbutton_edit_form extends block_edit_form {
         if (isset($mform->_submitValues['icondelete-hidden'])) {
             $skip = array_merge($skip, array_keys($mform->_submitValues['icondelete-hidden']));
         }
+        if (isset($mform->_submitValues['config_defaulttextcolor'])) {
+            $data['config_defaulttextcolor'] = $mform->_submitValues['config_defaulttextcolor'];
+        }
+        if (isset($mform->_submitValues['config_defaultbackgroundcolor'])) {
+            $data['config_defaultbackgroundcolor'] = $mform->_submitValues['config_defaultbackgroundcolor'];
+        }
         // Renumber header entries to avoid gaps in numbering when an icon is deleted.
         $number = 1;
         for ($i = 0; $i < $mform->_constantValues['config_icon_number']; $i++) {
