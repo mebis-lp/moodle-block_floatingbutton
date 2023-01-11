@@ -42,7 +42,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
      *
      * @var block_floatingbutton
      */
-    protected $block;
+    public $block;
 
     /**
      * Form definition - call to parent definition() is avoided here to get
