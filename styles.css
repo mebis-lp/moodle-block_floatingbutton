@@ -24,6 +24,10 @@ div.mbs_floatingicon-btn {
     align-items: center;
 }
 
+.mbs_floatingicon-btn .icon {
+    width: auto;
+}
+
 .mbs_floatingicon-btn:hover {
     filter: hue-rotate(10deg) brightness(90%);
 }
