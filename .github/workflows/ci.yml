@@ -1,4 +1,4 @@
-name: Learningmap Github actions
+name: Floating buttons Github actions
 
 on: [push, pull_request]
 
