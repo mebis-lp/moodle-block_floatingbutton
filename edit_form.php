@@ -65,7 +65,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
             'text',
             'config_defaultbackgroundcolor',
             get_string('defaultbackgroundcolor', 'block_floatingbutton'),
-            ['class' => 'mbs-floatingbutton-color-input']
+            ['class' => 'block_floatingbutton-color-input']
         );
         $mform->setDefault('config_defaultbackgroundcolor', get_config('block_floatingbutton', 'defaultbackgroundcolor'));
         $mform->setType('config_defaultbackgroundcolor', PARAM_TEXT);
@@ -73,7 +73,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
             'text',
             'config_defaulttextcolor',
             get_string('defaulttextcolor', 'block_floatingbutton'),
-            ['class' => 'mbs-floatingbutton-color-input']
+            ['class' => 'block_floatingbutton-color-input']
         );
         $mform->setDefault('config_defaulttextcolor', get_config('block_floatingbutton', 'defaulttextcolor'));
         $mform->setType('config_defaulttextcolor', PARAM_TEXT);
@@ -148,11 +148,6 @@ class block_floatingbutton_edit_form extends block_edit_form {
 
         $mform = $this->_form;
 
-        $mform->addElement(
-            'html',
-            '<div class="mbs-iconpicker-container hide"></div>'
-        );
-
         $data = $mform->_defaultValues;
 
         $this->generate_course_module_list();
@@ -199,21 +194,21 @@ class block_floatingbutton_edit_form extends block_edit_form {
             'text',
             'config_icon',
             get_string('icon', 'block_floatingbutton'),
-            ['class' => 'mbs-floatingicon-input']
+            ['class' => 'block_floatingbutton-input']
         );
         $repeatarray[] = $mform->createElement('html', '</div></div><div class="row"><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'text',
             'config_backgroundcolor',
             get_string('backgroundcolor', 'block_floatingbutton'),
-            ['class' => 'mbs-floatingbutton-color-input']
+            ['class' => 'block_floatingbutton-color-input']
         );
         $repeatarray[] = $mform->createElement('html', '</div><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'text',
             'config_textcolor',
             get_string('textcolor', 'block_floatingbutton'),
-            ['class' => 'mbs-floatingbutton-color-input']
+            ['class' => 'block_floatingbutton-color-input']
         );
         $repeatarray[] = $mform->createElement('html', '</div></div><div class="row"><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
@@ -226,7 +221,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
             'submit',
             'icondelete',
             get_string('delete', 'block_floatingbutton'),
-            ['class' => 'mbs-floatingicons-edit']
+            ['class' => 'block_floatingbutton-edit']
         );
         $mform->registerNoSubmitButton('icondelete');
         $repeatarray[] = $mform->createElement('html', '</div></div>');
@@ -282,7 +277,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $PAGE->requires->js_call_amd(
             'block_floatingbutton/iconpicker',
             'init',
-            ['.mbs-iconpicker-container', '.mbs-floatingicons-iconpicker']
+            ['block_floatingbutton-iconpicker-button']
         );
         $PAGE->requires->js_call_amd('block_floatingbutton/colorpicker', 'init', []);
         // phpcs:enable

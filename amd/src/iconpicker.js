@@ -4,7 +4,7 @@ import ICON_SET from 'block_floatingbutton/iconset';
 
 var iconpickermodal;
 
-export const init = (iconpickerdiv, iconpickerselector) => {
+export const init = (iconpickerclass) => {
     // Add index to icon set to make producing an unique id easier.
     ICON_SET.forEach(function(v, i) {
         v.index = i;
@@ -13,24 +13,27 @@ export const init = (iconpickerdiv, iconpickerselector) => {
     var clickSet = false;
 
     // Make inputs of the moodle form invisible and add button for iconpicker.
-    let inputs = Array.from(document.querySelectorAll('.mbs-floatingicon-input input'));
+    let inputs = Array.from(document.querySelectorAll('.block_floatingbutton-input input'));
     inputs.forEach(function(input) {
         input.setAttribute('style', 'visibility: collapse; width: 0; margin: 0; padding: 0; position: absolute;');
         input.insertAdjacentHTML(
             'afterend',
-            '<button class="mbs-floatingicons-iconpicker btn btn-secondary btn-icon" type="button" id="' + input.id +
+            '<button class="' + iconpickerclass + ' btn btn-secondary btn-icon" type="button" id="' + input.id +
             '_button" data-icon-input="' + input.id + '"><i class="' + input.value + '"></i></button>'
         );
     });
 
     // Attach click listener to each iconpicker buton. The callback function also sets data-iconpicker
     // and data-icon-input attributes.
-    let iconpickers = Array.from(document.querySelectorAll(iconpickerselector));
+    let iconpickers = Array.from(document.querySelectorAll("." + iconpickerclass));
     iconpickers.forEach(function(picker) {
         picker.addEventListener('click', function() {
             iconpickermodal.show();
-            document.querySelector('.mbs-iconpicker').setAttribute('data-iconpicker', picker.id);
-            document.querySelector('.mbs-iconpicker').setAttribute('data-icon-input', picker.getAttribute('data-icon-input'));
+            document.querySelector('.block_floatingbutton-iconpicker').setAttribute('data-iconpicker', picker.id);
+            document.querySelector('.block_floatingbutton-iconpicker').setAttribute(
+                'data-icon-input',
+                picker.getAttribute('data-icon-input')
+            );
             highlightselected();
         });
     });
@@ -51,9 +54,9 @@ export const init = (iconpickerdiv, iconpickerselector) => {
                             // Listeners for the icons and the search input have to be registered when modal is shown for the first
                             // time because modal doesn't exist in the DOM before.
                             if (!clickSet) {
-                                let search = document.querySelector('#mbs-iconpicker-search');
+                                let search = document.querySelector('#block_floatingbutton-iconpicker-search');
                                 search.addEventListener('input', searchicon);
-                                let icons = Array.from(document.querySelectorAll('.mbs-iconpicker-icon'));
+                                let icons = Array.from(document.querySelectorAll('.block_floatingbutton-iconpicker-icon'));
                                 icons.forEach(function(icon) {
                                     icon.addEventListener('click', iconclick);
                                 });
@@ -70,8 +73,8 @@ export const init = (iconpickerdiv, iconpickerselector) => {
  * Show only icons that match the search value
  */
 function searchicon() {
-    let search = document.querySelector('#mbs-iconpicker-search');
-    let icons = Array.from(document.querySelectorAll('.mbs-iconpicker-icon'));
+    let search = document.querySelector('#block_floatingbutton-iconpicker-search');
+    let icons = Array.from(document.querySelectorAll('.block_floatingbutton-iconpicker-icon'));
     icons.forEach(function(icon) {
         if (
             icon.getAttribute('data-search').includes(search.value)
@@ -87,8 +90,8 @@ function searchicon() {
  * Adds class "highlight" to currently selected icon.
  */
 function highlightselected() {
-    let icons = Array.from(document.getElementsByClassName('mbs-iconpicker-icon'));
-    let input = document.querySelector('.mbs-iconpicker').getAttribute('data-icon-input');
+    let icons = Array.from(document.getElementsByClassName('block_floatingbutton-iconpicker-icon'));
+    let input = document.querySelector('.block_floatingbutton-iconpicker').getAttribute('data-icon-input');
     if (!(input === null)) {
         let iconclass = document.getElementById(input).getAttribute('value');
         icons.forEach(function(icondiv) {
@@ -105,8 +108,8 @@ function highlightselected() {
  * @param {*} event
  */
 function iconclick(event) {
-    let id = document.querySelector('.mbs-iconpicker').getAttribute('data-iconpicker');
-    let input = document.querySelector('.mbs-iconpicker').getAttribute('data-icon-input');
+    let id = document.querySelector('.block_floatingbutton-iconpicker').getAttribute('data-iconpicker');
+    let input = document.querySelector('.block_floatingbutton-iconpicker').getAttribute('data-icon-input');
     if (id) {
         let icondiv = event.target;
         if (event.target.nodeName != 'DIV') {
