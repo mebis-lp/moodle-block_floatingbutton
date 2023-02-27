@@ -30,22 +30,39 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
     Example context (json):
     {
-    "icons":[
-        {
-            "name":"Section 0",
-            "url":"https://localhost/...",
-            "icon":"fa-globe",
-            "iconstyle":"background:green;"
-        }
-    ]
+        "courseid":"2",
+        "cmid":null,
+        "sectionnum":0,
+        "nextsectionnum":1,
+        "sesskey":"ABCDE",
+        "editing":true,
+        "icons":[
+            {
+            "name":"Edit",
+            "url":"https://localhost/course/view.php",
+            "icon":"fa fa-edit",
+            "edit":true,
+            "backgroundcolor":"#a4a5ac",
+            "textcolor":"#1c1d2f",
+            "notavailable":false,
+            "id":0,
+            "section":null,
+            "collapsed":true,
+            "anchor":"",
+            "sectionnav":false,
+            "internal":false,
+            "prevsection":false,
+            "tiles":false,
+            "external":false
+            }
+        ]
     }
 }}
-<form method="post" href="{{{url}}}">
+<form method="post" action="{{{url}}}">
     <input type="hidden" name="id" value="{{courseid}}"/>
     <input type="hidden" name="sesskey" value="{{sesskey}}"/>
     <input type="hidden" name="edit" value="{{#editing}}off{{/editing}}{{^editing}}on{{/editing}}"/>
-    <button type="submit" title="{{name}}" style="background: {{backgroundcolor}}; color: {{textcolor}};" {{!
-            }}class="{{#editing}} mbs-floatingicons-edit-active{{/editing}} btn btn-icon icon-no-margin mbs_floatingicon-btn">
+    <button type="submit" title="{{name}}" style="background-color: {{backgroundcolor}}; color: {{textcolor}};" class="{{#editing}} block_floatingbutton-edit-active{{/editing}} btn btn-icon icon-no-margin block_floatingbutton-btn">
         <i class="icon {{icon}}" aria-hidden="true"></i>
     </button>
 </form>

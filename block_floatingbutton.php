@@ -24,6 +24,20 @@
  */
 class block_floatingbutton extends block_base {
     /**
+     * Names of special link types
+     *
+     * @var array
+     */
+    protected $speciallinks = [
+        'turn_editing_on',
+        'next_section',
+        'previous_section',
+        'back_to_main_page',
+        'back_to_activity_section',
+        'change_editor'
+    ];
+
+    /**
      * Initialize block
      *
      * @return void
@@ -31,14 +45,6 @@ class block_floatingbutton extends block_base {
      */
     public function init(): void {
         $this->title = get_string('floatingbutton', 'block_floatingbutton');
-        $this->speciallinks = [
-            'turn_editing_on',
-            'next_section',
-            'previous_section',
-            'back_to_main_page',
-            'back_to_activity_section',
-            'change_editor'
-        ];
     }
 
     /**

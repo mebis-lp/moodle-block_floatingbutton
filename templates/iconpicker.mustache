@@ -32,13 +32,13 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     {
     }
 }}
-<div class="mbs-iconpicker">
-    <div class="mbs-iconpicker-search">
-        <label for="mbs-iconpicker-search">{{#str}} iconsearch, block_floatingbutton {{/str}}</label>
-        <input id="mbs-iconpicker-search" class="mbs-iconpicker-search-input">
+<div class="block_floatingbutton-iconpicker">
+    <div class="block_floatingbutton-iconpicker-search">
+        <label for="block_floatingbutton-iconpicker-search">{{#str}} iconsearch, block_floatingbutton {{/str}}</label>
+        <input id="block_floatingbutton-iconpicker-search" class="block_floatingbutton-iconpicker-search-input">
     </div>
     {{#icons}}
-        <div class="mbs-iconpicker-icon" id="mbs-iconpicker-icon-{{index}}" data-search="{{value}} {{searchvalues}}">
+        <div class="block_floatingbutton-iconpicker-icon" id="block_floatingbutton-iconpicker-icon-{{index}}" data-search="{{value}} {{searchvalues}}">
             <i class="{{value}}"></i>
         </div>
     {{/icons}}

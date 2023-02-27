@@ -1,4 +1,4 @@
-.mbs-floatingicons {
+.block_floatingbutton-floatingicons {
     position: fixed;
     bottom: calc(2rem + 36px);
     right: 2rem;
@@ -7,40 +7,51 @@
     z-index: 1000;
 }
 
-.drawer-right.show .mbs-floatingicons,
-.show-drawer-right .mbs-floatingicons {
+.drawer-right.show .block_floatingbutton-floatingicons,
+.show-drawer-right .block_floatingbutton-floatingicons {
     right: calc(315px + 2rem);
 }
 
-.mbs-floatingicons button {
+.block_floatingbutton-floatingicons .block_floatingbutton-btn {
     margin-bottom: 2px;
 }
 
-.mbs_floatingicon-btn {
+.block_floatingbutton-floatingicons div.block_floatingbutton-btn {
     word-wrap: break-word;
     float: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.mbs_floatingicon-btn:hover {
+.block_floatingbutton-floatingicons .block_floatingbutton-btn .icon {
+    width: auto;
+}
+
+.block_floatingbutton-floatingicons .block_floatingbutton-btn:hover {
     filter: hue-rotate(10deg) brightness(90%);
 }
 
-.mbs-floatingicons-edit-active i {
+.block_floatingbutton-floatingicons a:hover {
+    text-decoration: none;
+}
+
+.block_floatingbutton-floatingicons .block_floatingbutton-edit-active i {
     filter: invert(90%);
 }
 
-.mbs-floatingicons-iconpicker {
+.block_floatingbutton-iconpicker-button {
     height: calc(1.5em + 0.75rem + 2px);
     width: calc(1.5em + 0.75rem + 2px);
 }
 
-.mbs-iconpicker {
+.block_floatingbutton-iconpicker {
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
 }
 
-.mbs-iconpicker-icon {
+.block_floatingbutton-iconpicker .block_floatingbutton-iconpicker-icon {
     display: flex;
     font-size: 25px;
     height: 40px;
@@ -60,19 +71,19 @@
     border-radius: 4px;
 }
 
-.mbs-iconpicker-icon.highlight {
+.block_floatingbutton-iconpicker .block_floatingbutton-iconpicker-icon.highlight {
     background-color: goldenrod;
 }
 
-.mbs-iconpicker-search {
+.block_floatingbutton-iconpicker .block_floatingbutton-iconpicker-search {
     width: 100%;
 }
 
-.mbs-iconpicker-search-input {
+.block_floatingbutton-iconpicker .block_floatingbutton-iconpicker-search-input {
     width: 95%;
 }
 
-.mbs-floatingbutton-color-input input[type="color"] {
+.block_floatingbutton-color-input input[type="color"] {
     width: 2.5em;
     padding: 0;
 }
