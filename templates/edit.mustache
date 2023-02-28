@@ -30,32 +30,25 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
     Example context (json):
     {
-        "courseid":"2",
-        "cmid":null,
-        "sectionnum":0,
-        "nextsectionnum":1,
-        "sesskey":"ABCDE",
+        "name":"Edit",
+        "url":"https://localhost/course/view.php",
+        "icon":"fa fa-edit",
+        "edit":true,
+        "backgroundcolor":"#a4a5ac",
+        "textcolor":"#1c1d2f",
+        "notavailable":false,
+        "id":0,
+        "section":null,
+        "collapsed":true,
+        "anchor":"",
+        "sectionnav":false,
+        "internal":false,
+        "prevsection":false,
+        "tiles":false,
+        "external":false,
         "editing":true,
-        "icons":[
-            {
-            "name":"Edit",
-            "url":"https://localhost/course/view.php",
-            "icon":"fa fa-edit",
-            "edit":true,
-            "backgroundcolor":"#a4a5ac",
-            "textcolor":"#1c1d2f",
-            "notavailable":false,
-            "id":0,
-            "section":null,
-            "collapsed":true,
-            "anchor":"",
-            "sectionnav":false,
-            "internal":false,
-            "prevsection":false,
-            "tiles":false,
-            "external":false
-            }
-        ]
+        "courseid":"123",
+        "sesskey":"aBc12"
     }
 }}
 <form method="post" action="{{{url}}}">
