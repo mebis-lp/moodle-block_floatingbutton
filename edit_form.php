@@ -38,13 +38,6 @@ class block_floatingbutton_edit_form extends block_edit_form {
     protected $iscourse;
 
     /**
-     * The block we are editing
-     *
-     * @var block_floatingbutton
-     */
-    public $block;
-
-    /**
      * Form definition - call to parent definition() is avoided here to get
      * correct order.
      *
@@ -158,20 +151,17 @@ class block_floatingbutton_edit_form extends block_edit_form {
             'config_header',
             get_string('icon', 'block_floatingbutton') . ' {no}'
         );
-        $repeatarray[] = $mform->createElement('html', '<div class="row"><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'text',
             'config_name',
             get_string('name', 'block_floatingbutton')
         );
-        $repeatarray[] = $mform->createElement('html', '</div><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'select',
             'config_type',
             get_string('type', 'block_floatingbutton'),
             $types
         );
-        $repeatarray[] = $mform->createElement('html', '</div></div><div class="row"><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'url',
             'config_externalurl',
@@ -189,34 +179,29 @@ class block_floatingbutton_edit_form extends block_edit_form {
             get_string('speciallink', 'block_floatingbutton'),
             $speciallinkoptions
         );
-        $repeatarray[] = $mform->createElement('html', '</div><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'text',
             'config_icon',
             get_string('icon', 'block_floatingbutton'),
             ['class' => 'block_floatingbutton-input']
         );
-        $repeatarray[] = $mform->createElement('html', '</div></div><div class="row"><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'text',
             'config_backgroundcolor',
             get_string('backgroundcolor', 'block_floatingbutton'),
             ['class' => 'block_floatingbutton-color-input']
         );
-        $repeatarray[] = $mform->createElement('html', '</div><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'text',
             'config_textcolor',
             get_string('textcolor', 'block_floatingbutton'),
             ['class' => 'block_floatingbutton-color-input']
         );
-        $repeatarray[] = $mform->createElement('html', '</div></div><div class="row"><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'advcheckbox',
             'config_customlayout',
             get_string('customlayout', 'block_floatingbutton')
         );
-        $repeatarray[] = $mform->createElement('html', '</div><div class="col-lg">');
         $repeatarray[] = $mform->createElement(
             'submit',
             'icondelete',
@@ -224,7 +209,6 @@ class block_floatingbutton_edit_form extends block_edit_form {
             ['class' => 'block_floatingbutton-edit']
         );
         $mform->registerNoSubmitButton('icondelete');
-        $repeatarray[] = $mform->createElement('html', '</div></div>');
 
         $repeatedoptions = [];
         $repeatedoptions['config_name']['type'] = PARAM_RAW;
