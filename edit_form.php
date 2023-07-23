@@ -338,6 +338,15 @@ class block_floatingbutton_edit_form extends block_edit_form {
     // phpcs:disable
 
     /**
+     * Display edit form, when adding a floating button block.
+     *
+     * @return boolean
+     */
+    public static function display_form_when_adding(): bool {
+        return true;
+    }
+
+    /**
      * Overrides the _process_submission() method to remove empty spaces in the arrays in the block config.
      *
      * @param string $method
@@ -393,11 +402,13 @@ class block_floatingbutton_edit_form extends block_edit_form {
      */
     public function validation($data, $files): array {
         $errors = [];
-        for ($i = 0; $i < count($data['config_name']); $i++) {
-            if (isset($data['config_type'][$i]) &&
-                $data['config_type'][$i] == 'external' &&
-                empty($data['config_externalurl'][$i])) {
-                $errors['config_externalurl[' . $i . ']'] = get_string('missing_externalurl', 'block_floatingbutton');
+        if (!empty($data['config_name'])) {
+            for ($i = 0; $i < count($data['config_name']); $i++) {
+                if (isset($data['config_type'][$i]) &&
+                    $data['config_type'][$i] == 'external' &&
+                    empty($data['config_externalurl'][$i])) {
+                    $errors['config_externalurl[' . $i . ']'] = get_string('missing_externalurl', 'block_floatingbutton');
+                }
             }
         }
         return $errors;
