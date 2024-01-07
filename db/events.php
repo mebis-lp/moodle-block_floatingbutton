@@ -28,6 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 $observers = [
     [
         'eventname' => '\core\event\course_module_deleted',
-        'callback' => '\block_floatingbutton\autoupdate::update_from_delete_event'
-    ]
+        'callback' => '\block_floatingbutton\autoupdate::update_from_delete_event',
+    ],
 ];

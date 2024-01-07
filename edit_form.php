@@ -130,7 +130,7 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $types = [
             'internal' => get_string('type_internal', 'block_floatingbutton'),
             'external' => get_string('type_external', 'block_floatingbutton'),
-            'special' => get_string('type_special', 'block_floatingbutton')
+            'special' => get_string('type_special', 'block_floatingbutton'),
         ];
 
         $speciallinks = $this->block->get_special_links();

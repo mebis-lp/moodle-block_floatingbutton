@@ -34,7 +34,7 @@ class block_floatingbutton extends block_base {
         'previous_section',
         'back_to_main_page',
         'back_to_activity_section',
-        'change_editor'
+        'change_editor',
     ];
 
     /**
@@ -297,7 +297,7 @@ class block_floatingbutton extends block_base {
                     'internal' => $internal,
                     'prevsection' => $prevsection,
                     'tiles' => $tiles,
-                    'external' => $external
+                    'external' => $external,
                 ];
                 $context->icons[] = $icon;
             }
