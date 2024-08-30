@@ -97,14 +97,14 @@ class block_floatingbutton extends block_base {
      */
     public function get_content(): stdClass {
         global $OUTPUT, $CFG;
-        $dummy = new stdClass;
+        $dummy = new stdClass();
         $dummy->text = '';
         if ($this->content !== null) {
             return $dummy;
         }
 
-        $this->content = new stdClass;
-        $context = new stdClass;
+        $this->content = new stdClass();
+        $context = new stdClass();
 
         if ($this->page->course) {
             $context->courseid = $this->page->course->id;
@@ -171,7 +171,7 @@ class block_floatingbutton extends block_base {
                         // Skip empty internal links (this could happen, when a course module that is referenced by an icon
                         // is not included in backup).
                         if (!is_null($this->config->cmid[$i])) {
-                            list($type, $id) = explode('=', $this->config->cmid[$i]);
+                            [$type, $id] = explode('=', $this->config->cmid[$i]);
                             switch ($type) {
                                 case 'cmid':
                                     if (in_array($id, array_keys($modinfo->get_cms()))) {
@@ -251,8 +251,9 @@ class block_floatingbutton extends block_base {
                                 break;
                             case 'back_to_main_page':
                                 $url = (new moodle_url(
-                                        '/course/view.php',
-                                        ['id' => $context->courseid])
+                                    '/course/view.php',
+                                    ['id' => $context->courseid]
+                                )
                                     )->out();
                                 $name = get_string('back_to_main_page', 'block_floatingbutton');
                                 break;
@@ -266,8 +267,9 @@ class block_floatingbutton extends block_base {
                                 break;
                             case 'change_editor':
                                 $url = (new moodle_url(
-                                        '/user/editor.php',
-                                        ['course' => $context->courseid])
+                                    '/user/editor.php',
+                                    ['course' => $context->courseid]
+                                )
                                     )->out();
                                 $name = get_string('editorpreferences');
                                 break;

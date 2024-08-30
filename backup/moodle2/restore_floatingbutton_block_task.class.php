@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_floatingbutton_block_task extends restore_block_task {
-
     /**
      * Does nothing.
      *
@@ -110,7 +109,7 @@ class restore_floatingbutton_block_task extends restore_block_task {
             }
 
             foreach ($config->cmid as $key => $url) {
-                list($type, $id) = explode('=', $url);
+                [$type, $id] = explode('=', $url);
                 if ($type == 'cmid') {
                     $moduleid = restore_dbops::get_backup_ids_record($this->get_restoreid(), 'course_module', $id);
                     if ($moduleid) {

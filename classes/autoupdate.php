@@ -34,7 +34,7 @@ class autoupdate {
      * @param \core\event\base $event
      * @return void
      */
-    public static function update_from_delete_event(\core\event\base $event) : void {
+    public static function update_from_delete_event(\core\event\base $event): void {
         global $DB;
         $data = $event->get_data();
         if (isset($data['courseid']) && $data['courseid'] > 0) {

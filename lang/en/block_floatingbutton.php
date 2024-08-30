@@ -46,9 +46,9 @@ $string['icon'] = 'Icon';
 $string['icon_help'] = 'FontAwesome abbreviation of the icon';
 $string['icon_missing'] = 'You have to choose an icon';
 $string['iconsearch'] = 'Search icons';
-$string['left'] = 'Left';
 $string['internalurl'] = 'Section or activity';
 $string['internalurl_help'] = 'Section or activity the button should link to';
+$string['left'] = 'Left';
 $string['missing_externalurl'] = 'External URL cannot be empty';
 $string['name'] = 'Title';
 $string['name_help'] = 'Title of the button, shown when hovering';
@@ -63,10 +63,10 @@ $string['textcolor_help'] = 'Text color for this icon (not affecting others)';
 $string['top'] = 'Top';
 $string['turn_editing_on'] = 'Turn editing on/off';
 $string['type'] = 'Link type';
+$string['type_external'] = 'External link';
 $string['type_help'] = 'There are three types of links availabile:<br/>
 - Internal links, referencing activities or sections in your course<br/>
 - External links<br/>
 - Links to moodle functions (e.g. turn edition off/on)';
 $string['type_internal'] = 'Internal link';
-$string['type_external'] = 'External link';
 $string['type_special'] = 'Link to moodle functions';

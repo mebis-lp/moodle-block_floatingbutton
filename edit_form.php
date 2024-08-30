@@ -322,7 +322,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
                         $this->set_value($mform, 'text', 'config_textcolor[' . $i . ']', $data['config_defaulttextcolor'], true);
                     }
                     if (!isset($data['config_backgroundcolor'][$i]) || $data['config_backgroundcolor'][$i] == '') {
-                        $this->set_value($mform,
+                        $this->set_value(
+                            $mform,
                             'text',
                             'config_backgroundcolor[' . $i . ']',
                             $data['config_defaultbackgroundcolor'],
@@ -404,9 +405,11 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $errors = [];
         if (!empty($data['config_name'])) {
             for ($i = 0; $i < count($data['config_name']); $i++) {
-                if (isset($data['config_type'][$i]) &&
+                if (
+                    isset($data['config_type'][$i]) &&
                     $data['config_type'][$i] == 'external' &&
-                    empty($data['config_externalurl'][$i])) {
+                    empty($data['config_externalurl'][$i])
+                ) {
                     $errors['config_externalurl[' . $i . ']'] = get_string('missing_externalurl', 'block_floatingbutton');
                 }
             }
