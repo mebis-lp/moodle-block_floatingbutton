@@ -115,10 +115,8 @@ class restore_floatingbutton_block_task extends restore_block_task {
                     if ($moduleid) {
                         $config->cmid[$key] = 'cmid=' . $moduleid->newitemid;
                     } else {
-                        try {
-                            $modinfo->get_cm($config->cmid);
-                        } catch (Exception $e) {
-                            $modinfo->cmid = null;
+                        if (!isset($modinfo->cms[$id])) {
+                            $config->cmid[$key] = null;
                         }
                     }
                 }
