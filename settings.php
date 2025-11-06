@@ -36,10 +36,8 @@ if ($ADMIN->fulltree) {
         '.drawer-left-toggle',
         '.drawer-right-toggle',
         'footer',
-        '#page-header',
         '.secondary-navigation',
         'bycs-topbar',
-        '.mbscontentheader',
     ];
 
     $nopaddingselectorsdefault = [
