@@ -134,10 +134,12 @@ class block_floatingbutton_edit_form extends block_edit_form {
         ];
 
         $speciallinks = $this->block->get_special_links();
-        $speciallinkoptions = [];
+        $speciallinknames = [];
         foreach ($speciallinks as $k) {
-            $speciallinkoptions[$k] = get_string($k, 'block_floatingbutton');
+            $speciallinknames[$k] = get_string($k, 'block_floatingbutton');
         }
+
+        $speciallinkoptions = $this->block->get_special_link_options();
 
         $mform = $this->_form;
 
@@ -146,6 +148,8 @@ class block_floatingbutton_edit_form extends block_edit_form {
         $this->generate_course_module_list();
 
         $repeatarray = [];
+        $repeatedoptions = [];
+
         $repeatarray[] = $mform->createElement(
             'header',
             'config_header',
@@ -177,8 +181,25 @@ class block_floatingbutton_edit_form extends block_edit_form {
             'select',
             'config_speciallink',
             get_string('speciallink', 'block_floatingbutton'),
-            $speciallinkoptions
+            $speciallinknames
         );
+
+        if (count($speciallinkoptions) > 0) {
+            $speciallinkoptionsgroup = [];
+            foreach ($speciallinkoptions as $speciallink => $speciallinkoptionset) {
+                foreach ($speciallinkoptionset as $optionname => $optionformtype) {
+                    $speciallinkoptionsgroup[] = $mform->createElement(
+                        $optionformtype,
+                        'config_' . $optionname,
+                        get_string($optionname, 'block_floatingbutton')
+                    );
+                    $repeatedoptions['config_' . $optionname]['hideif'] = ['config_speciallink', 'neq', $speciallink];
+                }
+            }
+            $repeatarray[] = $mform->createElement('group', 'config_speciallinkoptions', '', $speciallinkoptionsgroup, null, false);
+            $repeatedoptions['config_speciallinkoptions']['hideif'] = ['config_type', 'neq', 'special'];
+        }
+
         $repeatarray[] = $mform->createElement(
             'text',
             'config_icon',
@@ -210,7 +231,6 @@ class block_floatingbutton_edit_form extends block_edit_form {
         );
         $mform->registerNoSubmitButton('icondelete');
 
-        $repeatedoptions = [];
         $repeatedoptions['config_name']['type'] = PARAM_RAW;
         $repeatedoptions['config_externalurl']['type'] = PARAM_URL;
         $repeatedoptions['config_cmid']['type'] = PARAM_RAW;

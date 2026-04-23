@@ -39,6 +39,17 @@ class block_floatingbutton extends block_base {
     ];
 
     /**
+     * Options for special link types. Contains an array of option name => form element type pairs for
+     * each special link type.
+     * @var array
+     */
+    protected array $speciallinksoptions = [
+        'toggle_distractionfree' => [
+            'enable_distractionfree_by_default' => 'advcheckbox',
+        ],
+    ];
+
+    /**
      * Initialize block
      *
      * @return void
@@ -87,6 +98,14 @@ class block_floatingbutton extends block_base {
      */
     public function get_special_links(): array {
         return $this->speciallinks;
+    }
+
+    /**
+     * Returns an array of additional options for special link types that should be displayed in config
+     * when the type is selected.
+     */
+    public function get_special_link_options(): array {
+        return $this->speciallinksoptions;
     }
 
     /**

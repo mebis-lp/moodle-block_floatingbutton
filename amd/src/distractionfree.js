@@ -31,9 +31,13 @@ import * as Storage from 'core/sessionstorage';
  * @param {Array} distractionSelectors - An array of CSS selectors for distractions to hide.
  * @param {Array} nopaddingSelectors - An array of CSS selectors for elements to remove padding / margin from.
  * @param {boolean} closedrawers - Whether to close open drawers.
+ * @param {boolean} initialState - The initial state of the distraction-free mode.
  */
-export const init = (toggleButtonId, distractionSelectors, nopaddingSelectors, closedrawers) => {
+export const init = (toggleButtonId, distractionSelectors, nopaddingSelectors, closedrawers, initialState = false) => {
     let button = document.getElementById(toggleButtonId);
+    if (initialState) {
+        Storage.set('block_floatingbutton/distraction-free-button-state', 'true');
+    }
     button.addEventListener('click', () => {
         const state = Storage.get('block_floatingbutton/distraction-free-button-state');
         if (state === 'true') {
