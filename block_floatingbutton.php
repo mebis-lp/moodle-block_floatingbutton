@@ -261,6 +261,7 @@ class block_floatingbutton extends block_base {
                             case 'back_to_activity_section':
                                 if (!is_null($context->cmid)) {
                                     $url = $format->get_view_url($context->sectionnum);
+                                    $url->set_anchor('section-' . $context->sectionnum);
                                     $name = get_string('back_to_activity_section', 'block_floatingbutton');
                                 } else {
                                     $notavailable = true;
