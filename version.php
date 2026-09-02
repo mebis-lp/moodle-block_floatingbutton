@@ -29,5 +29,5 @@ $plugin->release = '0.1.4';
 $plugin->version = 2025110600;
 $plugin->requires = 2022041900;
 $plugin->component = 'block_floatingbutton';
-$plugin->supports = [401, 501];
+$plugin->supported = [401, 501];
 $plugin->maturity = MATURITY_STABLE;
